@@ -1,5 +1,5 @@
 /* Curated, versioned benchmark data. Do not mix unlike test suites.
-   CPU single-thread values are PassMark PerformanceTest ratings, sourced per model. Coverage prioritizes common used-market CPUs.
+   CPU single-thread values are PassMark PerformanceTest ratings; CPU gaming and application indices are Tom's Hardware 2026 suite scores.
    GPU gaming values are Tom's Hardware 2026 native-resolution geometric-mean FPS indices
    relative to RTX 5090 at 1080p Ultra. No upscaling or frame generation is included.
    Raster table averages 11 games; ray tracing table uses the publication's RT suite.
