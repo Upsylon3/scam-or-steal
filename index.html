@@ -36,7 +36,7 @@ footer{color:var(--muted);font-size:.75rem;margin-top:26px;text-align:center}foo
 @media(max-width:700px){.g{grid-template-columns:1fr}.steps{grid-template-columns:1fr}.item{grid-template-columns:28px 1fr 74px}.item .pf{grid-column:2/-1;grid-row:2}.item .pr{display:none}.act,.det{grid-column:1/-1}}
 </style></head><body>
 <div class="wrap">
-<header><div class="top"><div class="brand">Scam or Steal<small>Which used PC is actually worth its price?</small></div>
+<header><div class="top"><div class="brand">Scam or Steal<small>Which used PC is actually worth its price? · Benchmark model v2.3</small></div>
 <div class="row"><button class="btn gh" data-act="help">? How it works</button><button class="btn gh" data-act="theme">◐</button></div></div>
 <nav id="nav"><button data-tab="compare">Compare</button><button data-tab="table">Table</button><button data-tab="versus">Versus</button><button data-tab="add">Add a PC</button><button data-tab="settings">Settings</button><button data-tab="admin" id="adminTab" hidden>Admin</button></nav></header>
 
@@ -91,8 +91,8 @@ footer{color:var(--muted);font-size:.75rem;margin-top:26px;text-align:center}foo
 <dialog id="help"><h2>How scoring works</h2><p class="lead">Each PC gets a <b>performance</b> score: CPU, GPU, RAM and storage compared with a top-end yardstick PC, then weighted by how much a typical 2026 build spends on each part. RAM and storage are valued at current market prices per GB, so DDR5 counts for more than DDR4 by what it really costs. <b>Value</b> divides performance by price (minus an included setup), so a cheaper PC can beat a stronger one. Assumed RAM/SSD values are marked with <span class="est">~</span>.</p><button class="btn pri" onclick="this.closest('dialog').close()">Got it</button></dialog>
 <div class="toast" id="toast"></div>
 <script src="builtin-parts.js"></script><script src="config.js"></script>
-<script src="benchmark-data.js"></script>
-<script src="scoring-engine.js"></script>
+<script src="benchmark-data.js?v=20261016-2ce222f"></script>
+<script src="scoring-engine.js?v=20261016-2ce222f"></script>
 <script>
 const $=id=>document.getElementById(id),C=window.PVL_CONFIG||{},ON=!!(C.supabaseUrl&&C.supabaseKey),LS=localStorage,
  /* The URL is cleaned before use. A trailing slash ("https://x.supabase.co/") makes every request go to "https://x.supabase.co//auth/v1/...",
