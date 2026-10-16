@@ -26,7 +26,8 @@ assert.equal(gamingOld.confidence, "high", "curated CPU and GPU benchmarks shoul
 assert.equal(gamingOld.gpuGamingMeasured, true, "RX 6700 XT should use the sourced gaming benchmark");
 assert.equal(gamingOld.gpuPct, 32.5, "1440p raster score should match the curated source record");
 assert.equal(engine.score({cpuName:"Unknown CPU",cpuScore:10000,gpuName:"Unknown GPU",gpuScore:gpu}, reference, gaming).confidence, "low", "unlisted CPU/GPU must be marked as lower-confidence fallback");
-assert.equal(engine.modelVersion, "performance-v2.3");
+assert.equal(engine.modelVersion, "performance-v2.4");
+assert.ok(Math.abs(gamingOld.gpuSuiteFps - (32.5 / 100 * 167.3)) < 0.001, "FPS estimate should convert the 1440p raster suite index using the published RTX 5090 baseline");
 const cpuGameComparison = engine.score({cpuName:"AMD Ryzen 7 9800X3D",cpuScore:45000,gpuName:"NVIDIA GeForce RTX 5090",gpuScore:38864}, reference, gaming);
 assert.equal(cpuGameComparison.cpuBenchmarkType, "tomCpuGaming", "gaming profile should use the matched Tom's Hardware CPU game suite");
 assert.ok(Math.abs(cpuGameComparison.cpuPct - (97 / 95.7 * 100)) < 0.001, "CPU gaming ratio should use the source suite score");
@@ -43,5 +44,7 @@ const raster4k = engine.score(cpu5700, reference, {...gaming, resolution:"4k", g
 const rt1440 = engine.score(cpu5700, reference, {...gaming, resolution:"1440p", graphicsMode:"rayTracing"});
 assert.equal(raster4k.gpuPct, 25.3, "4K raster should use the selected resolution benchmark");
 assert.equal(rt1440.gpuPct, 17.9, "ray tracing should use the separate RT benchmark suite");
+assert.ok(Math.abs(rt1440.gpuSuiteFps - (17.9 / 100 * 100.8)) < 0.001, "ray-tracing FPS should use the RT suite baseline");
+assert.equal(engine.score({cpuName:"Unknown CPU",cpuScore:10000,gpuName:"Unknown GPU",gpuScore:gpu}, reference, gaming).gpuSuiteFps, null, "unsupported GPUs must not receive invented FPS estimates");
 assert.notEqual(raster4k.gpuPct, rt1440.gpuPct, "raster and ray tracing are separate benchmark suites");
 console.log("Scoring engine tests passed");
