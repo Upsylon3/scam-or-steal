@@ -52,7 +52,7 @@ footer{color:var(--muted);font-size:.75rem;margin-top:26px;text-align:center}foo
    <div class="row" style="gap:4px 22px;margin:2px 0 2px"><label class="chk"><input type="checkbox" id="optAvail"> Available only</label><label class="chk" title="Hides any listing that costs more than a more powerful one (same price stays)"><input type="checkbox" id="optWorth"> Logically worth only</label></div><div class="hint" id="viewNote" style="margin:2px 0 6px"></div><div id="list"></div><p class="hint">Performance = % of your yardstick PC (see Settings). Value = how good the deal is, 100 = best among the available listings. Prices are net of any included setup.</p></div>
  </div></section>
 
-<section id="t-table" hidden><div class="card table-card"><div class="table-title-row"><div><h2>Listing spreadsheet</h2><p class="lead">A full, sortable data grid for every saved PC. Click any column heading to sort; scroll horizontally for the full hardware and scoring breakdown.</p></div><button class="btn" data-act="tableExport">Export visible rows to CSV</button></div><div class="table-toolbar"><div class="table-search"><label for="tableSearch">Search listings</label><input id="tableSearch" type="search" placeholder="Name, CPU, GPU, RAM, price…"></div><div class="table-filter"><label for="tableFilter">Show</label><select id="tableFilter"><option value="all">All listings</option><option value="available">Available only</option><option value="unavailable">Unavailable only</option><option value="favorites">Favourites only</option></select></div><div id="tableCount" class="hint" aria-live="polite"></div></div><p class="hint">CPU/GPU percentages are relative to your yardstick. RAM/storage percentages are market-value indices, not predicted FPS. Value / 100 is normalized against the best available listing; performance per 100 currency units uses the selected workload profile.</p><div id="tableBody" class="table-viewport"></div></div></section>
+<section id="t-table" hidden><div class="card table-card"><div class="table-title-row"><div><h2>Listing spreadsheet</h2><p class="lead">A full, sortable data grid for every saved PC. Click any column heading to sort; scroll horizontally for the full hardware and scoring breakdown.</p></div><button class="btn" data-act="tableExport">Export visible rows to CSV</button></div><div class="table-toolbar"><div class="table-search"><label for="tableSearch">Search listings</label><input id="tableSearch" type="search" placeholder="Name, CPU, GPU, RAM, price…"></div><div class="table-filter"><label for="tableFilter">Show</label><select id="tableFilter"><option value="all">All listings</option><option value="available">Available only</option><option value="unavailable">Unavailable only</option><option value="favorites">Favourites only</option></select></div><div id="tableCount" class="hint" aria-live="polite"></div></div><p class="hint">CPU/GPU percentages are relative to your yardstick. Performance uses CPU single-/multi-thread scores plus GPU score for the selected workload; RAM/storage value indices are not predicted FPS. “Proxy” means no curated CPU single-thread score is available, so the model falls back to CPU Mark. Evidence quality is shown per row. Value / 100 is normalized against the best available listing.</p><div id="tableBody" class="table-viewport"></div></div></section>
 <section id="t-versus" hidden><div class="card"><h2>Versus</h2><p class="lead">Compare two saved PCs by performance, effective price and performance per euro. Differences within ±5% are treated as roughly equal.</p><div class="g"><div><label for="versusA">First PC</label><select id="versusA"></select></div><div><label for="versusB">Second PC</label><select id="versusB"></select></div></div><div id="versusBody" style="margin-top:14px"></div></div></section>
 <section id="t-add" hidden><div class="card"><h2 id="fTitle">Add a PC</h2><p class="lead">Only CPU, GPU and price are needed. Everything else is optional.</p>
  <form id="form" novalidate><div class="g">
@@ -91,6 +91,8 @@ footer{color:var(--muted);font-size:.75rem;margin-top:26px;text-align:center}foo
 <dialog id="help"><h2>How scoring works</h2><p class="lead">Each PC gets a <b>performance</b> score: CPU, GPU, RAM and storage compared with a top-end yardstick PC, then weighted by how much a typical 2026 build spends on each part. RAM and storage are valued at current market prices per GB, so DDR5 counts for more than DDR4 by what it really costs. <b>Value</b> divides performance by price (minus an included setup), so a cheaper PC can beat a stronger one. Assumed RAM/SSD values are marked with <span class="est">~</span>.</p><button class="btn pri" onclick="this.closest('dialog').close()">Got it</button></dialog>
 <div class="toast" id="toast"></div>
 <script src="builtin-parts.js"></script><script src="config.js"></script>
+<script src="benchmark-data.js"></script>
+<script src="scoring-engine.js"></script>
 <script>
 const $=id=>document.getElementById(id),C=window.PVL_CONFIG||{},ON=!!(C.supabaseUrl&&C.supabaseKey),LS=localStorage,
  /* The URL is cleaned before use. A trailing slash ("https://x.supabase.co/") makes every request go to "https://x.supabase.co//auth/v1/...",
@@ -247,18 +249,23 @@ const pk={cpu:picker($("pkCpu"),"cpu","Search e.g. Ryzen 5 5600"),gpu:picker($("
  ac:picker($("pkAdCpu"),"cpu","Search a CPU…"),ag:picker($("pkAdGpu"),"gpu","Search a GPU…")};
 /* ---------- scoring ---------- */
 const live=(k,n)=>{const q=String(n||"").toLowerCase(),p=parts[k].find(x=>x[0].toLowerCase()==q);return p?p[1]:null},refNow=()=>{const r={...(P.ref||remote.ref||DEF)},c=live("cpu",r.cpuName),g=live("gpu",r.gpuName);if(c!=null)r.cpu=c;if(g!=null)r.gpu=g;return r};
-const WORKLOADS={balanced:{label:"Balanced / general use",w:{cpu:.32,gpu:.38,ram:.20,sto:.10},hint:"A general-purpose balance."},gaming:{label:"Gaming",w:{cpu:.30,gpu:.48,ram:.14,sto:.08},hint:"Prioritizes GPU performance while retaining CPU influence."},competitive:{label:"CPU-heavy / competitive gaming",w:{cpu:.45,gpu:.32,ram:.15,sto:.08},hint:"Raises CPU importance for high-refresh-rate or CPU-limited games."},gpu:{label:"GPU-heavy workloads",w:{cpu:.20,gpu:.60,ram:.14,sto:.06},hint:"Prioritizes GPU compute; VRAM capacity is not modeled separately."},productivity:{label:"CPU-heavy productivity",w:{cpu:.55,gpu:.20,ram:.18,sto:.07},hint:"Prioritizes CPU throughput."}};
-/* NOTE: results are named cpuPct/gpuPct/ramPct/stoPct on purpose. They used to be called cpu/gpu/ram/sto, and "ram" got spread over the
-   listing's own RAM size, so a 32 GB DDR5 kit was displayed as "50 GB" (its score). Never reuse a listing field name here. */
-function score(it,ref){const M=MARKET,W=COST.w,WW=(WORKLOADS[P.workload]||WORKLOADS.balanced).w,
+const WORKLOADS={
+ balanced:{label:"Balanced / general use",cpuShare:.45,gpuShare:.55,singleMix:.45,hint:"CPU and GPU performance are scored separately; RAM and storage are shown as capacity/value context, not fake FPS."},
+ gaming:{label:"Gaming",cpuShare:.35,gpuShare:.65,singleMix:.75,hint:"GPU-led gaming profile, with extra weight on CPU single-thread performance as a broad gaming proxy."},
+ competitive:{label:"CPU-heavy / competitive gaming",cpuShare:.60,gpuShare:.40,singleMix:.80,hint:"CPU-led profile for high-refresh-rate and CPU-limited games. This is not a game-specific FPS prediction."},
+ gpu:{label:"GPU-heavy workloads",cpuShare:.20,gpuShare:.80,singleMix:.20,hint:"GPU-led compute profile; actual results vary by application and VRAM requirements."},
+ productivity:{label:"CPU-heavy productivity",cpuShare:.75,gpuShare:.25,singleMix:.15,hint:"CPU throughput-led profile; multi-thread performance dominates the CPU portion."}
+};
+/* Performance v2 deliberately excludes RAM/storage market prices from performance. Those affect capability/fit, not raw CPU/GPU speed. */
+function score(it,ref){const M=MARKET,W=COST.w,profile=WORKLOADS[P.workload]||WORKLOADS.balanced,
  cpu=it.cpuScore/ref.cpu*100,gpu=it.gpuScore/ref.gpu*100,
- /* RAM is measured in market value, not just GB: 32 GB DDR5 is worth what it costs relative to the reference kit, DDR4 and DDR3 less */
  ram=Math.min(100,it.ram*(M.ramPerGB[it.ramType]??M.ramPerGB.DDR4)/(M.ref.ramGB*M.ramPerGB[M.ref.ramType])*100),
  sto=Math.min(100,((it.ssd||0)*M.ssdPerGB+(it.hdd||0)*M.hddPerGB)/(M.ref.ssdGB*M.ssdPerGB)*100),
- valueIdx=Math.max(0,(cpu*W.cpu+gpu*W.gpu+ram*W.ram+sto*W.sto)*(1+(LOOK[it.aesthetic]||0)*P.aes/100)),idx=Math.max(0,cpu*WW.cpu+gpu*WW.gpu+ram*WW.ram+sto*WW.sto),
- /* an included setup is not part of the PC: take it off the listed price (never below 1, so the value maths cannot divide by zero) */
+ perf=window.PVL_SCORING.score({cpuName:it.cpuName,cpuScore:it.cpuScore,gpuScore:it.gpuScore},ref,profile),
+ valueIdx=Math.max(0,(cpu*W.cpu+gpu*W.gpu+ram*W.ram+sto*W.sto)*(1+(LOOK[it.aesthetic]||0)*P.aes/100)),
+ idx=Math.max(0,perf.idx),
  cut=Math.max(0,Math.min(it.setup?(Number.isFinite(it.setupAmt)?it.setupAmt:P.setup):0,it.price-1)),net=it.price-cut;
- return{cpuPct:cpu,gpuPct:gpu,ramPct:ram,stoPct:sto,idx,valueIdx,cut,net,val:valueIdx/net,perfPerEuro:idx/net}}
+ return{cpuPct:cpu,gpuPct:gpu,ramPct:ram,stoPct:sto,idx,valueIdx,cut,net,val:valueIdx/net,perfPerEuro:idx/net,cpuSinglePct:perf.cpuSinglePct,cpuMultiPct:perf.cpuMultiPct,cpuSingleScore:perf.cpuSingleScore,cpuSingleMeasured:perf.cpuSingleMeasured,scoreConfidence:perf.confidence,scoreEvidence:perf.evidence,scoreModel:perf.modelVersion}}
 /* ---------- render ---------- */
 const stor=(n)=>n>=1000?(n/1000).toString().replace(/\.0$/,"")+" TB":n+" GB";
 const isAvail=it=>it.available!==false;
@@ -296,8 +303,11 @@ const TABLE_COLUMNS=[
  {key:"cut",group:"Price",label:"Setup deduction",numeric:true,sort:r=>r.cut,csv:r=>r.cut,cell:r=>r.cut?money(r.cut):"—"},
  {key:"net",group:"Price",label:"Effective price",numeric:true,sort:r=>r.net,csv:r=>r.net,cell:r=>'<b>'+money(r.net)+'</b>'},
  {key:"cpuName",group:"CPU",label:"CPU model",numeric:false,sort:r=>r.cpuName.toLowerCase(),csv:r=>r.cpuName,cell:r=>esc(r.cpuName)},
- {key:"cpuScore",group:"CPU",label:"PassMark score",numeric:true,sort:r=>r.cpuScore,csv:r=>r.cpuScore,cell:r=>fmt(r.cpuScore)},
- {key:"cpuPct",group:"CPU",label:"% of yardstick",numeric:true,sort:r=>r.cpuPct,csv:r=>Number(r.cpuPct.toFixed(2)),cell:r=>r.cpuPct.toFixed(1)+"%"},
+ {key:"cpuScore",group:"CPU",label:"CPU Mark (multi)",numeric:true,sort:r=>r.cpuScore,csv:r=>r.cpuScore,cell:r=>fmt(r.cpuScore)},
+ {key:"cpuSingleScore",group:"CPU",label:"Single-thread rating",numeric:true,sort:r=>r.cpuSingleScore,csv:r=>r.cpuSingleMeasured?Math.round(r.cpuSingleScore):"PassMark proxy",cell:r=>r.cpuSingleMeasured?fmt(r.cpuSingleScore):"Proxy"},
+ {key:"cpuSinglePct",group:"CPU",label:"Single-thread % yardstick",numeric:true,sort:r=>r.cpuSinglePct,csv:r=>Number(r.cpuSinglePct.toFixed(2)),cell:r=>r.cpuSinglePct.toFixed(1)+"%"},
+ {key:"cpuMultiPct",group:"CPU",label:"Multi-thread % yardstick",numeric:true,sort:r=>r.cpuMultiPct,csv:r=>Number(r.cpuMultiPct.toFixed(2)),cell:r=>r.cpuMultiPct.toFixed(1)+"%"},
+ {key:"cpuPct",group:"CPU",label:"Profile CPU score",numeric:true,sort:r=>r.cpuPct,csv:r=>Number(r.cpuPct.toFixed(2)),cell:r=>r.cpuPct.toFixed(1)+"%"},
  {key:"gpuName",group:"GPU",label:"GPU model",numeric:false,sort:r=>r.gpuName.toLowerCase(),csv:r=>r.gpuName,cell:r=>esc(r.gpuName)},
  {key:"gpuScore",group:"GPU",label:"PassMark score",numeric:true,sort:r=>r.gpuScore,csv:r=>r.gpuScore,cell:r=>fmt(r.gpuScore)},
  {key:"gpuPct",group:"GPU",label:"% of yardstick",numeric:true,sort:r=>r.gpuPct,csv:r=>Number(r.gpuPct.toFixed(2)),cell:r=>r.gpuPct.toFixed(1)+"%"},
@@ -310,6 +320,7 @@ const TABLE_COLUMNS=[
  {key:"valueIdx",group:"Scores",label:"Value index",numeric:true,sort:r=>r.valueIdx,csv:r=>Number(r.valueIdx.toFixed(2)),cell:r=>r.valueIdx.toFixed(2)},
  {key:"value",group:"Scores",label:"Value / 100",numeric:true,sort:r=>r.val,csv:(r,best)=>best?Math.round(r.val/best*100):0,cell:(r,best)=>'<b>'+(best?Math.round(r.val/best*100):0)+'</b>'},
  {key:"perfEuro",group:"Scores",label:"Perf pts / 100 currency",numeric:true,sort:r=>r.perfPerEuro,csv:r=>Number((r.perfPerEuro*100).toFixed(3)),cell:r=>(r.perfPerEuro*100).toFixed(2)},
+ {key:"scoreConfidence",group:"Scores",label:"Evidence quality",numeric:false,sort:r=>r.scoreConfidence,csv:r=>r.scoreConfidence+" — "+r.scoreEvidence,cell:r=>r.scoreConfidence==="medium"?'<span class="bd">Medium</span>':'<span class="bd no">Low</span>'},
  {key:"aesthetic",group:"Details",label:"Looks",numeric:false,sort:r=>r.aesthetic||"neutral",csv:r=>r.aesthetic||"neutral",cell:r=>esc(r.aesthetic||"neutral")},
  {key:"unknown",group:"Details",label:"Assumed specs",numeric:false,sort:r=>([r.ramUnknown&&"RAM",r.ssdUnknown&&"SSD"].filter(Boolean).join(", ")||"").toLowerCase(),csv:r=>[r.ramUnknown&&"RAM",r.ssdUnknown&&"SSD"].filter(Boolean).join(", "),cell:r=>[r.ramUnknown&&"RAM",r.ssdUnknown&&"SSD"].filter(Boolean).join(", ")||"—"},
  {key:"actions",group:"Actions",label:"Actions",numeric:false,sort:()=>"",csv:()=>"",cell:r=>'<div class="table-actions"><button class="btn" data-act="edit" data-i="'+r.i+'">Edit</button><button class="btn" data-act="chooseVersus" data-i="'+r.i+'">Versus</button><button class="btn" data-act="avail" data-i="'+r.i+'">'+(isAvail(r)?"Unavailable":"Available")+'</button><button class="btn dng" data-act="del" data-i="'+r.i+'">Delete</button></div>'}
