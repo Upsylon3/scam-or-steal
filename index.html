@@ -250,13 +250,13 @@ const pk={cpu:picker($("pkCpu"),"cpu","Search e.g. Ryzen 5 5600"),gpu:picker($("
 /* ---------- scoring ---------- */
 const live=(k,n)=>{const q=String(n||"").toLowerCase(),p=parts[k].find(x=>x[0].toLowerCase()==q);return p?p[1]:null},refNow=()=>{const r={...(P.ref||remote.ref||DEF)},c=live("cpu",r.cpuName),g=live("gpu",r.gpuName);if(c!=null)r.cpu=c;if(g!=null)r.gpu=g;return r};
 const WORKLOADS={
- balanced:{label:"Balanced / general use",cpuShare:.45,gpuShare:.55,singleMix:.45,useGameBenchmarks:false,hint:"CPU and GPU performance are scored separately; RAM and storage are shown as capacity/value context, not fake FPS."},
- gaming:{label:"Gaming",cpuShare:.35,gpuShare:.65,singleMix:.75,useGameBenchmarks:true,hint:"GPU-led gaming profile, with extra weight on CPU single-thread performance as a broad gaming proxy."},
- competitive:{label:"CPU-heavy / competitive gaming",cpuShare:.60,gpuShare:.40,singleMix:.80,useGameBenchmarks:true,hint:"CPU-led profile for high-refresh-rate and CPU-limited games. This is not a game-specific FPS prediction."},
- gpu:{label:"GPU-heavy workloads",cpuShare:.20,gpuShare:.80,singleMix:.20,useGameBenchmarks:false,hint:"GPU-led compute profile; actual results vary by application and VRAM requirements."},
- productivity:{label:"CPU-heavy productivity",cpuShare:.75,gpuShare:.25,singleMix:.15,useGameBenchmarks:false,hint:"CPU throughput-led profile; multi-thread performance dominates the CPU portion."}
+ balanced:{label:"Balanced / general use",cpuShare:.45,gpuShare:.55,singleMix:.45,useGameBenchmarks:false,useCpuGamingBenchmarks:false,useCpuAppBenchmarks:false,hint:"CPU and GPU performance are scored separately; RAM and storage are shown as capacity/value context, not fake FPS."},
+ gaming:{label:"Gaming",cpuShare:.35,gpuShare:.65,singleMix:.75,useGameBenchmarks:true,useCpuGamingBenchmarks:true,useCpuAppBenchmarks:false,hint:"GPU-led gaming profile, with extra weight on CPU single-thread performance as a broad gaming proxy."},
+ competitive:{label:"CPU-heavy / competitive gaming",cpuShare:.60,gpuShare:.40,singleMix:.80,useGameBenchmarks:true,useCpuGamingBenchmarks:true,useCpuAppBenchmarks:false,hint:"CPU-led profile for high-refresh-rate and CPU-limited games. This is not a game-specific FPS prediction."},
+ gpu:{label:"GPU-heavy workloads",cpuShare:.20,gpuShare:.80,singleMix:.20,useGameBenchmarks:false,useCpuGamingBenchmarks:false,useCpuAppBenchmarks:false,hint:"GPU-led compute profile; actual results vary by application and VRAM requirements."},
+ productivity:{label:"CPU-heavy productivity",cpuShare:.75,gpuShare:.25,singleMix:.15,useGameBenchmarks:false,useCpuGamingBenchmarks:false,useCpuAppBenchmarks:true,hint:"CPU throughput-led profile; multi-thread performance dominates the CPU portion."}
 };
-/* Performance v2 deliberately excludes RAM/storage market prices from performance. Those affect capability/fit, not raw CPU/GPU speed. */
+/* Performance scoring deliberately excludes RAM/storage market prices from performance. Those affect capability/fit, not raw CPU/GPU speed. */
 function score(it,ref){const M=MARKET,W=COST.w,profile=WORKLOADS[P.workload]||WORKLOADS.balanced,
  cpu=it.cpuScore/ref.cpu*100,gpu=it.gpuScore/ref.gpu*100,
  ram=Math.min(100,it.ram*(M.ramPerGB[it.ramType]??M.ramPerGB.DDR4)/(M.ref.ramGB*M.ramPerGB[M.ref.ramType])*100),
@@ -265,7 +265,7 @@ function score(it,ref){const M=MARKET,W=COST.w,profile=WORKLOADS[P.workload]||WO
  valueIdx=Math.max(0,(cpu*W.cpu+gpu*W.gpu+ram*W.ram+sto*W.sto)*(1+(LOOK[it.aesthetic]||0)*P.aes/100)),
  idx=Math.max(0,perf.idx),
  cut=Math.max(0,Math.min(it.setup?(Number.isFinite(it.setupAmt)?it.setupAmt:P.setup):0,it.price-1)),net=it.price-cut;
- return{cpuPct:perf.cpuPct,cpuPassmarkPct:cpu,gpuPct:perf.gpuPct,gpuPassmarkPct:perf.gpuPassmarkPct,gpuGamingMeasured:perf.gpuGamingMeasured,gpuBenchmarkType:perf.gpuBenchmarkType,gpuResolution:perf.gpuResolution,ramPct:ram,stoPct:sto,idx,valueIdx,cut,net,val:valueIdx/net,perfPerEuro:idx/net,cpuSinglePct:perf.cpuSinglePct,cpuMultiPct:perf.cpuMultiPct,cpuSingleScore:perf.cpuSingleScore,cpuSingleMeasured:perf.cpuSingleMeasured,scoreConfidence:perf.confidence,scoreEvidence:perf.evidence,scoreModel:perf.modelVersion}}
+ return{cpuPct:perf.cpuPct,cpuPassmarkPct:cpu,cpuBenchmarkType:perf.cpuBenchmarkType,cpuGamingMeasured:perf.cpuGamingMeasured,cpuAppsMeasured:perf.cpuAppsMeasured,gpuPct:perf.gpuPct,gpuPassmarkPct:perf.gpuPassmarkPct,gpuGamingMeasured:perf.gpuGamingMeasured,gpuBenchmarkType:perf.gpuBenchmarkType,gpuResolution:perf.gpuResolution,ramPct:ram,stoPct:sto,idx,valueIdx,cut,net,val:valueIdx/net,perfPerEuro:idx/net,cpuSinglePct:perf.cpuSinglePct,cpuMultiPct:perf.cpuMultiPct,cpuSingleScore:perf.cpuSingleScore,cpuSingleMeasured:perf.cpuSingleMeasured,scoreConfidence:perf.confidence,scoreEvidence:perf.evidence,scoreModel:perf.modelVersion}}
 /* ---------- render ---------- */
 const stor=(n)=>n>=1000?(n/1000).toString().replace(/\.0$/,"")+" TB":n+" GB";
 const isAvail=it=>it.available!==false;
@@ -309,6 +309,7 @@ const TABLE_COLUMNS=[
  {key:"cpuMultiPct",group:"CPU",label:"Multi-thread % yardstick",numeric:true,sort:r=>r.cpuMultiPct,csv:r=>Number(r.cpuMultiPct.toFixed(2)),cell:r=>r.cpuMultiPct.toFixed(1)+"%"},
  {key:"cpuPct",group:"CPU",label:"Profile CPU score",numeric:true,sort:r=>r.cpuPct,csv:r=>Number(r.cpuPct.toFixed(2)),cell:r=>r.cpuPct.toFixed(1)+"%"},
  {key:"cpuPassmarkPct",group:"CPU",label:"CPU Mark % yardstick",numeric:true,sort:r=>r.cpuPassmarkPct,csv:r=>Number(r.cpuPassmarkPct.toFixed(2)),cell:r=>r.cpuPassmarkPct.toFixed(1)+"%"},
+ {key:"cpuBenchmarkType",group:"CPU",label:"CPU benchmark used",numeric:false,sort:r=>r.cpuBenchmarkType,csv:r=>r.cpuBenchmarkType==="tomCpuGaming"?"Tom’s Hardware gaming suite":r.cpuBenchmarkType==="tomCpuApps"?"Tom’s Hardware application suite":"PassMark fallback",cell:r=>r.cpuBenchmarkType==="tomCpuGaming"?'<span class="bd">Game suite</span>':r.cpuBenchmarkType==="tomCpuApps"?'<span class="bd">App suite</span>':'<span class="bd no">PassMark fallback</span>'},
  {key:"gpuName",group:"GPU",label:"GPU model",numeric:false,sort:r=>r.gpuName.toLowerCase(),csv:r=>r.gpuName,cell:r=>esc(r.gpuName)},
  {key:"gpuScore",group:"GPU",label:"PassMark score",numeric:true,sort:r=>r.gpuScore,csv:r=>r.gpuScore,cell:r=>fmt(r.gpuScore)},
  {key:"gpuPct",group:"GPU",label:"Profile GPU %",numeric:true,sort:r=>r.gpuPct,csv:r=>Number(r.gpuPct.toFixed(2)),cell:r=>r.gpuPct.toFixed(1)+"%"},
