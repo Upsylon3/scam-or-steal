@@ -24,6 +24,11 @@ window.PVL_BENCHMARKS = {
     { model: "Intel Core i5-13500T", aliases: ["Core i5-13500T", "Intel Core i5-13500T", "13th Gen Intel(R) Core(TM) i5-13500T"], score: 3577, source: "https://www.cpubenchmark.net/cpu.php?cpu=Intel+Core+i5-13500T&id=5239", confidence: "measured" },
     { model: "Intel Core i7-12700KF", aliases: ["Core i7-12700KF", "Intel Core i7-12700KF", "12th Gen Intel(R) Core(TM) i7-12700KF"], score: 3979, source: "https://www.cpubenchmark.net/cpu.php?cpu=Intel+Core+i7-12700KF&id=4608", confidence: "measured" },
     { model: "Intel Core i7-14700KF", aliases: ["Core i7-14700KF", "Intel Core i7-14700KF", "Intel(R) Core(TM) i7-14700KF"], score: 4466, source: "https://www.cpubenchmark.net/cpu.php?cpu=Intel+Core+i7-14700KF&id=5723", confidence: "measured" },
+    { model: "AMD Ryzen 5 3600", aliases: ["Ryzen 5 3600", "AMD Ryzen 5 3600 6-Core Processor"], score: 2557, source: "https://www.cpubenchmark.net/cpu.php?cpu=AMD+Ryzen+5+3600&id=3481", confidence: "measured" },
+    { model: "AMD Ryzen 7 5800X3D", aliases: ["Ryzen 7 5800X3D", "AMD Ryzen 7 5800X3D 8-Core Processor"], score: 3233, source: "https://www.cpubenchmark.net/cpu.php?cpu=AMD+Ryzen+7+5800X3D&id=4823", confidence: "measured" },
+    { model: "Intel Core i5-12400F", aliases: ["Core i5-12400F", "Intel Core i5-12400F", "12th Gen Intel(R) Core(TM) i5-12400F"], score: 3484, source: "https://www.cpubenchmark.net/cpu.php?cpu=Intel+Core+i5-12400F&id=4681", confidence: "measured" },
+    { model: "Intel Core i5-13600K", aliases: ["Core i5-13600K", "Intel Core i5-13600K", "13th Gen Intel(R) Core(TM) i5-13600K"], score: 4110, source: "https://www.cpubenchmark.net/cpu.php?cpu=Intel+Core+i5-13600K&id=5008", confidence: "measured" },
+    { model: "Intel Core i7-13700K", aliases: ["Core i7-13700K", "Intel Core i7-13700K", "13th Gen Intel(R) Core(TM) i7-13700K"], score: 4326, source: "https://www.cpubenchmark.net/cpu.php?cpu=Intel+Core+i7-13700K", confidence: "measured" },
     { model: "AMD Ryzen 9 9950X3D", aliases: ["Ryzen 9 9950X3D", "AMD Ryzen 9 9950X3D 16-Core Processor"], score: 4737, source: "https://www.cpubenchmark.net/cpu.php?cpu=AMD+Ryzen+9+9950X3D&id=6549", confidence: "measured" }
   ],
   gpuGaming: [
