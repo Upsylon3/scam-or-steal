@@ -1,6 +1,6 @@
 # Scam or Steal scoring model
 
-**Current performance model:** `performance-v2.3`
+**Current performance model:** `performance-v2.4`
 
 ## Two scores, two questions
 
@@ -29,7 +29,7 @@ For each listing:
 | GPU-heavy workloads | 20% | 80% | 20% |
 | CPU-heavy productivity | 75% | 25% | 15% |
 
-These profiles are useful relative estimates, not a substitute for exact game- or application-specific benchmark results. RAM capacity, VRAM capacity, power limits, cooling, drivers, game settings and CPU/GPU bottlenecks can change real outcomes; this index does not predict FPS.
+These profiles are useful relative estimates, not a substitute for exact game- or application-specific benchmark results. The app also reports an **estimated GPU-suite FPS** when a GPU has a curated record: it multiplies the GPU’s suite percentage by the source’s published RTX 5090 geometric-mean FPS at the chosen resolution and rendering mode. This is a multi-game suite aggregate, not an estimate for any one title and not a guarantee for the whole PC. The published GPU testbed uses a Ryzen 7 9800X3D, so slower CPUs can bottleneck more strongly, especially at 1080p. RAM/VRAM capacity, power limits, cooling, drivers and game settings can also change real outcomes. Unsupported GPUs deliberately show no FPS estimate rather than an invented or interpolated value.
 
 ## Benchmark data
 
@@ -42,7 +42,7 @@ These profiles are useful relative estimates, not a substitute for exact game- o
 `benchmark-data.js` contains a curated subset of Tom's Hardware's 2026 GPU hierarchy:
 - rasterization at native 1080p, 1440p and 4K Ultra;
 - a separate ray-tracing suite at the same resolutions;
-- indices relative to the RTX 5090 in the corresponding resolution/mode table.
+- indices relative to the RTX 5090 in the corresponding resolution/mode table. The FPS estimator uses the source’s RTX 5090 suite baselines: raster 203.8 / 167.3 / 110.8 FPS and ray tracing 125.7 / 100.8 / 64.1 FPS at 1080p / 1440p / 4K respectively. These are geometric-mean suite results, not per-game values.
 
 The source suite uses a geometric mean across multiple games and excludes upscaling/frame generation. These percentages should never be described as expected FPS in an individual game.
 
