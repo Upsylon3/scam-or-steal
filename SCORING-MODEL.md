@@ -1,6 +1,6 @@
 # Scam or Steal scoring model
 
-**Current performance model:** `performance-v2.2`
+**Current performance model:** `performance-v2.3`
 
 ## Two scores, two questions
 
@@ -17,7 +17,7 @@ For each listing:
 
 1. CPU single-thread percentage is taken from the curated PassMark single-thread table when both the listing CPU and reference CPU have entries. If either CPU is missing, the model uses the CPU Mark ratio for both sides, avoiding a mixed benchmark scale.
 2. CPU multi-thread percentage uses PassMark CPU Mark relative to the reference CPU Mark.
-3. The workload profile blends those two CPU percentages using its `singleMix` value.
+3. For Gaming and CPU-heavy / competitive gaming, CPU percentage uses Tom’s Hardware’s 2026 17-game 1080p CPU suite when both listing and reference CPUs are covered. For CPU-heavy productivity, the model uses the matched Tom’s Hardware single-threaded and multi-threaded application indices, blended using `singleMix`. If both CPUs do not have the required records, it falls back to PassMark-based CPU percentages for both sides. Other profiles blend PassMark CPU single-thread and multi-thread percentages using `singleMix`.
 4. GPU percentage uses Tom's Hardware's GPU gaming suite only for the Gaming and CPU-heavy/competitive-gaming profiles, and only when both the listing GPU and reference GPU are in the curated suite. The selected resolution and raster/ray-tracing mode are used. Otherwise, GPU percentage falls back to PassMark G3D Mark relative to the reference.
 5. CPU and GPU percentages are combined using the selected profile's CPU/GPU shares.
 
@@ -35,7 +35,7 @@ These profiles are useful relative estimates, not a substitute for exact game- o
 
 ### CPU single-thread
 
-`benchmark-data.js` contains explicitly sourced PassMark PerformanceTest single-thread ratings for selected CPUs. Each record includes aliases and its source URL. PassMark's CPU Mark and G3D Mark datasets in `builtin-parts.js` remain the broad fallback and are refreshed by the existing generator.
+`benchmark-data.js` contains explicitly sourced PassMark PerformanceTest single-thread ratings and a subset of Tom’s Hardware CPU Hierarchy 2026 gaming, single-threaded application and multi-threaded application scores. Each record includes aliases and a source URL. Tom’s CPU gaming suite tests 17 games at 1080p with an RTX 5090 FE; it is a CPU-limited comparison suite, not a prediction of a user’s exact FPS. The application suite uses a separate test bench and must not be mixed with PassMark scores. PassMark CPU Mark and G3D Mark remain the broad fallback and are refreshed by the existing generator.
 
 ### GPU gaming
 
@@ -58,13 +58,15 @@ Confidence describes benchmark coverage, not certainty about a particular PC's r
 
 ## Adding or refreshing data
 
+The benchmark dataset is curated, not silently auto-updated. A data validation script checks source URLs, numeric ranges, duplicate model aliases and the update date on every CI run. This catches malformed edits, not changed values at the source; a human still needs to refresh the records when the source methodology or rankings change.
+
 1. Verify the exact model and benchmark value on the linked source page.
 2. Preserve the source URL, aliases and benchmark suite/methodology.
 3. Only compare scores within the same source/test suite, resolution and mode. Do not merge scores from different test benches into one scale.
 4. If a GPU is not in the gaming suite, let it fall back to PassMark instead of estimating or interpolating a score.
 5. Update `updatedAt` and the model version when a scoring behavior changes.
-6. Run `node tests/scoring-engine.test.js` and the GitHub Actions static-app workflow.
+6. Run `node scripts/check-benchmark-data.js`, `node tests/scoring-engine.test.js` and the GitHub Actions static-app workflow.
 
 ## Regression coverage
 
-The tests check the Ryzen 5 2600X to Ryzen 7 5700X upgrade with the same GPU, the stronger impact of a CPU upgrade in the CPU-heavy profile, resolution-specific raster scores, separate ray-tracing scores, unknown hardware fallback, custom reference fallback, and minimum dataset coverage.
+The tests check the Ryzen 5 2600X to Ryzen 7 5700X upgrade with the same GPU, CPU gaming suite selection, productivity app-suite blending, resolution-specific raster scores, separate ray-tracing scores, unknown hardware fallback, custom reference fallback, and minimum dataset coverage.
