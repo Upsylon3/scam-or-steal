@@ -26,6 +26,7 @@ label{display:block;font-size:.78rem;font-weight:650;color:var(--muted);margin-b
 .bar{height:6px;background:var(--line);border-radius:9px;overflow:hidden;margin-top:5px}.bar i{display:block;height:100%;background:var(--acc)}.num{font-weight:800}.k{font-size:.7rem;color:var(--muted)}
 .bd{display:inline-block;font-size:.7rem;font-weight:750;padding:2px 8px;border-radius:99px;background:color-mix(in srgb,var(--good) 15%,var(--panel));color:var(--good);margin-left:6px}
 .act{grid-column:2/-1;display:flex;gap:6px;flex-wrap:wrap;align-items:center}.act .btn{padding:5px 10px;font-size:.78rem}.fav{color:var(--warn)}.det{grid-column:2/-1;font-size:.8rem;color:var(--muted);background:var(--soft);padding:10px 12px;border-radius:9px}
+.data-table th,.data-table td{padding:10px 8px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line);font-size:.82rem}.data-table th{color:var(--muted);white-space:nowrap}.data-table tbody tr:hover{background:var(--soft)}
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0}.steps div{background:var(--soft);border-radius:10px;padding:12px;font-size:.85rem}.steps b{display:block;color:var(--acc)}
 .empty{text-align:center;padding:26px 8px}.off{opacity:.55}.bd.no{background:color-mix(in srgb,var(--bad) 14%,var(--panel));color:var(--bad)}.bd.su{background:color-mix(in srgb,var(--acc) 13%,var(--panel));color:var(--acc)}details{margin-top:16px}summary{cursor:pointer;font-weight:650;color:var(--acc)}
 input[type=range]{padding:0;accent-color:var(--acc)}.rh{display:flex;justify-content:space-between;font-size:.82rem;font-weight:650;margin-bottom:3px}
@@ -37,7 +38,7 @@ footer{color:var(--muted);font-size:.75rem;margin-top:26px;text-align:center}foo
 <div class="wrap">
 <header><div class="top"><div class="brand">Scam or Steal<small>Which used PC is actually worth its price?</small></div>
 <div class="row"><button class="btn gh" data-act="help">? How it works</button><button class="btn gh" data-act="theme">◐</button></div></div>
-<nav id="nav"><button data-tab="compare">Compare</button><button data-tab="add">Add a PC</button><button data-tab="settings">Settings</button><button data-tab="admin" id="adminTab" hidden>Admin</button></nav></header>
+<nav id="nav"><button data-tab="compare">Compare</button><button data-tab="table">Table</button><button data-tab="versus">Versus</button><button data-tab="add">Add a PC</button><button data-tab="settings">Settings</button><button data-tab="admin" id="adminTab" hidden>Admin</button></nav></header>
 
 <section id="t-compare" hidden>
  <div id="welcome" class="card empty" hidden><h2>Welcome 👋</h2><p class="lead">Rank used-PC listings by real performance per euro. Three steps:</p>
@@ -51,6 +52,8 @@ footer{color:var(--muted);font-size:.75rem;margin-top:26px;text-align:center}foo
    <div class="row" style="gap:4px 22px;margin:2px 0 2px"><label class="chk"><input type="checkbox" id="optAvail"> Available only</label><label class="chk" title="Hides any listing that costs more than a more powerful one (same price stays)"><input type="checkbox" id="optWorth"> Logically worth only</label></div><div class="hint" id="viewNote" style="margin:2px 0 6px"></div><div id="list"></div><p class="hint">Performance = % of your yardstick PC (see Settings). Value = how good the deal is, 100 = best among the available listings. Prices are net of any included setup.</p></div>
  </div></section>
 
+<section id="t-table" hidden><div class="card"><h2>All listings</h2><p class="lead">A sortable overview of every saved PC, with value normalized against the best available listing.</p><label for="tableSort">Sort by</label><select id="tableSort"><option value="value">Best value</option><option value="perf">Performance</option><option value="price">Lowest effective price</option><option value="gpu">GPU score</option><option value="cpu">CPU score</option></select><div id="tableBody" style="overflow-x:auto;margin-top:14px"></div></div></section>
+<section id="t-versus" hidden><div class="card"><h2>Versus</h2><p class="lead">Compare two saved PCs by performance, effective price and performance per euro. Differences within ±5% are treated as roughly equal.</p><div class="g"><div><label for="versusA">First PC</label><select id="versusA"></select></div><div><label for="versusB">Second PC</label><select id="versusB"></select></div></div><div id="versusBody" style="margin-top:14px"></div></div></section>
 <section id="t-add" hidden><div class="card"><h2 id="fTitle">Add a PC</h2><p class="lead">Only CPU, GPU and price are needed. Everything else is optional.</p>
  <form id="form" novalidate><div class="g">
   <div class="full"><label>Listing name or link <span style="font-weight:400">(optional)</span></label><input id="f_name" placeholder="Paste the ad link or type a name"></div>
@@ -292,9 +295,9 @@ function renderSettings(){const r=refNow();$("refNow").innerHTML=`<span><b>${esc
  if(document.activeElement!==$("setupDef"))$("setupDef").value=P.setup;
  document.querySelectorAll("#cur button").forEach(b=>b.classList.toggle("on",b.dataset.c==P.cur));
  document.querySelectorAll(".cur").forEach(e=>e.textContent=P.cur=="EUR"?"€":"$")}
-function renderAll(){$("optAvail").checked=P.avail;$("optWorth").checked=P.worth;renderList();renderSettings();$("adminTab").hidden=!admin;$("adLock").hidden=!!admin;$("adBody").hidden=!admin;
+function renderAll(){$("optAvail").checked=P.avail;$("optWorth").checked=P.worth;renderList();renderTable();renderVersus();renderSettings();$("adminTab").hidden=!admin;$("adLock").hidden=!!admin;$("adBody").hidden=!admin;
  $("foot").innerHTML=`Your listings stay on your device. CPU/GPU scores come from PassMark and refresh every Monday. · <a href="#admin" data-tab="admin">Admin</a>`}
-function go(t){tab=t;["compare","add","settings","admin"].forEach(x=>$("t-"+x).hidden=x!=t);document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.tab==t));history.replaceState(null,"","#"+t);scrollTo(0,0)}
+function go(t){tab=t;["compare","table","versus","add","settings","admin"].forEach(x=>$("t-"+x).hidden=x!=t);document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.tab==t));history.replaceState(null,"","#"+t);scrollTo(0,0)}
 /* ---------- form ---------- */
 function unk(cb,inp,val,sel){cb.onchange=()=>{inp.disabled=cb.checked;if(sel){sel.disabled=cb.checked;if(cb.checked)sel.value="DDR4"}inp.value=cb.checked?val:""}}
 unk($("f_ramU"),$("f_ram"),16,$("f_ramType"));unk($("f_ssdU"),$("f_ssd"),1000);
@@ -335,7 +338,7 @@ document.addEventListener("click",e=>{const t=e.target.closest("[data-tab]");if(
 
  const c=e.target.closest("#cur button");if(c){P.cur=c.dataset.c;saveP();renderAll()}});
 document.addEventListener("input",e=>{const t=e.target;if(t.dataset.k){P[t.dataset.k]=+t.value;saveP();renderAll()}if(t.id=="setupDef"){P.setup=Math.max(0,+t.value||0);saveP()}});
-$("sortMode").onchange=renderList;$("adPass").addEventListener("keydown",e=>{if(e.key=="Enter")A.unlock()});$("optAvail").onchange=e=>{P.avail=e.target.checked;saveP();renderList()};$("optWorth").onchange=e=>{P.worth=e.target.checked;saveP();renderList()};
+$("sortMode").onchange=renderList;$("tableSort").onchange=renderTable;$("workloadMode").onchange=e=>{P.workload=e.target.value;saveP();renderAll()};$("versusA").onchange=e=>{P.versusA=e.target.value;saveP();renderVersus()};$("versusB").onchange=e=>{P.versusB=e.target.value;saveP();renderVersus()};$("adPass").addEventListener("keydown",e=>{if(e.key=="Enter")A.unlock()});$("optAvail").onchange=e=>{P.avail=e.target.checked;saveP();renderList()};$("optWorth").onchange=e=>{P.worth=e.target.checked;saveP();renderList()};
 /* Import ADDS to what you have and never deletes. Replacing would be dangerous now: with an account, a replaced list would delete listings
    everywhere, and a backup sent by a friend would wipe yours. To start clean, use "Delete all listings" first. */
 $("impFile").onchange=e=>{const f=e.target.files[0];e.target.value="";if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!Array.isArray(d.items))throw 0;
