@@ -2,7 +2,7 @@ name: Validate static app
 
 on:
   push:
-    branches: ["main", "fix/spreadsheet-table-and-view-bugs"]
+    branches: ["main", "fix/spreadsheet-table-and-view-bugs", "feat/p1-gaming-benchmark-coverage"]
   pull_request:
     branches: ["main"]
 
