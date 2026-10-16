@@ -114,7 +114,7 @@ const COST=(()=>{const b=MARKET.build,c={gpu:b.gpu,cpu:b.cpu,ram:b.ramGB*MARKET.
 const uid=()=>crypto.randomUUID?crypto.randomUUID():Math.random().toString(36).slice(2)+Date.now().toString(36),num=v=>typeof v=="number"&&isFinite(v),
  norm=i=>({...i,ssd:+i.ssd||0,hdd:+i.hdd||0,ramType:i.ramType||"DDR4",favorite:!!i.favorite,id:i.id||uid(),updatedAt:num(i.updatedAt)?i.updatedAt:0}); // updatedAt 0 = "older than any real edit"
 let items=jget("pcvaluelab_items",[]).map(norm),tombs=jget("pvl_tombs",[]).filter(t=>t&&typeof t.id=="string"),localParts={cpu:jget("pcvaluelab_custom_cpus",[]),gpu:jget("pcvaluelab_custom_gpus",[])},
-remote=jget("pvl_remote",{parts:[],ref:null}),P=Object.assign({aes:0,cur:"EUR",ref:null,theme:null,seen:0,avail:true,worth:false,setup:150},jget("pvl_prefs",{})),
+remote=jget("pvl_remote",{parts:[],ref:null}),P=Object.assign({aes:0,cur:"EUR",ref:null,theme:null,seen:0,avail:true,worth:false,setup:150,workload:"balanced",versusA:null,versusB:null},jget("pvl_prefs",{})),
 parts={cpu:[],gpu:[]},editIdx=-1,editId="",filt="all",admin=sessionStorage.getItem("pvl_admin")||"",tab="compare";
 if(LS.getItem("pcvaluelab_currency"))P.cur=LS.getItem("pcvaluelab_currency");if(LS.getItem("pcvaluelab_theme")&&!P.theme)P.theme=LS.getItem("pcvaluelab_theme");
 const saveP=()=>jset("pvl_prefs",P),saveI=()=>{jset("pcvaluelab_items",items);scheduleSync()}; // every local change is also pushed to the account (debounced), when signed in
