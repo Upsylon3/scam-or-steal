@@ -2,7 +2,7 @@ name: Validate static app
 
 on:
   push:
-    branches: ["main", "fix/spreadsheet-table-and-view-bugs", "feat/p1-gaming-benchmark-coverage"]
+    branches: ["main", "fix/spreadsheet-table-and-view-bugs", "feat/p1-gaming-benchmark-coverage", "feat/cpu-app-benchmark-coverage"]
   pull_request:
     branches: ["main"]
 
@@ -34,5 +34,7 @@ jobs:
       - name: Check JavaScript syntax
         run: node --check /tmp/scam-or-steal-app.js
 
+      - name: Validate curated benchmark data
+        run: node scripts/check-benchmark-data.js
       - name: Run scoring engine regression tests
         run: node tests/scoring-engine.test.js
