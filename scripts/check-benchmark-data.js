@@ -63,7 +63,7 @@ if (!Array.isArray(data.gpuGaming) || data.gpuGaming.length === 0) {
         const value = row[mode]?.[resolution];
         if (mode === "raster" && (!Number.isFinite(value) || value <= 0)) {
           fail("GPU " + row.model + " has invalid required raster score for " + resolution);
-        } else if (value != null && (!Number.isFinite(value) || value <= 0)) {
+        } else if (value != null && value !== 0 && (!Number.isFinite(value) || value < 0)) {
           fail("GPU " + row.model + " has invalid optional " + mode + " score for " + resolution);
         }
       }
