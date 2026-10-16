@@ -33,3 +33,6 @@ jobs:
           PY
       - name: Check JavaScript syntax
         run: node --check /tmp/scam-or-steal-app.js
+
+      - name: Run scoring engine regression tests
+        run: node tests/scoring-engine.test.js
