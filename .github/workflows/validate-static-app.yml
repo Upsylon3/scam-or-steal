@@ -1,0 +1,35 @@
+name: Validate static app
+
+on:
+  push:
+    branches: ["main", "fix/spreadsheet-table-and-view-bugs"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  javascript-syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Extract inline application script
+        run: |
+          python3 - <<'PY'
+          import re
+          from pathlib import Path
+          html = Path("index.html").read_text(encoding="utf-8")
+          scripts = []
+          for match in re.finditer(r"<script\b([^>]*)>(.*?)</script>", html, re.I | re.S):
+              if not re.search(r"\bsrc\s*=", match.group(1), re.I):
+                  scripts.append(match.group(2))
+          if not scripts:
+              raise SystemExit("No inline JavaScript application script found")
+          Path("/tmp/scam-or-steal-app.js").write_text(scripts[-1], encoding="utf-8")
+          print(f"Extracted inline script ({len(scripts[-1])} characters)")
+          PY
+      - name: Check JavaScript syntax
+        run: node --check /tmp/scam-or-steal-app.js
