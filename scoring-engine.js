@@ -1,7 +1,7 @@
 /* Versioned performance model. Benchmark ratios are only compared within a compatible source/test suite. */
 (function(root){
   "use strict";
-  const MODEL_VERSION = "performance-v2.3";
+  const MODEL_VERSION = "performance-v2.4";
   const normalize = value => String(value || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
   function findRecord(rows, name) {
     const key = normalize(name);
@@ -60,6 +60,15 @@
     const gpuPct = gameScoresAvailable
       ? gameRecord[graphicsMode][resolution] / refGameRecord[graphicsMode][resolution] * 100
       : rawGpuPct;
+    const suiteBaselines = {
+      raster: { "1080p": 203.8, "1440p": 167.3, "4k": 110.8 },
+      rayTracing: { "1080p": 125.7, "1440p": 100.8, "4k": 64.1 }
+    };
+    // Convert the source suite index into its published geometric-mean FPS baseline.
+    // This is a multi-game GPU-suite estimate, not a per-game or full-PC guarantee.
+    const gpuSuiteFps = gameRecord && gameRecord[graphicsMode] && Number.isFinite(gameRecord[graphicsMode][resolution])
+      ? gameRecord[graphicsMode][resolution] / 100 * suiteBaselines[graphicsMode][resolution]
+      : null;
     const cpuShare = Math.max(0, Number(profile.cpuShare ?? 0.5));
     const gpuShare = Math.max(0, Number(profile.gpuShare ?? 0.5));
     const total = cpuShare + gpuShare || 1;
@@ -79,7 +88,7 @@
       cpuPassmarkPct: passmarkCpuPct, cpuBenchmarkType, cpuGamingMeasured: cpuGamingAvailable, cpuAppsMeasured: cpuAppsAvailable,
       gpuPct, gpuPassmarkPct: rawGpuPct, gpuGamingMeasured: gameScoresAvailable,
       gpuBenchmarkType: gameScoresAvailable ? graphicsMode : "passmark",
-      gpuResolution: resolution, confidence, evidence, modelVersion: MODEL_VERSION
+      gpuResolution: resolution, gpuSuiteFps, confidence, evidence, modelVersion: MODEL_VERSION
     };
   }
   root.PVL_SCORING = { score, normalize, modelVersion: MODEL_VERSION, singleThreadRecord, gpuGamingRecord, cpuGamingRecord, cpuAppSingleRecord, cpuAppMultiRecord };
