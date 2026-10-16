@@ -60,8 +60,11 @@ if (!Array.isArray(data.gpuGaming) || data.gpuGaming.length === 0) {
     }
     for (const mode of ["raster", "rayTracing"]) {
       for (const resolution of ["1080p", "1440p", "4k"]) {
-        if (!Number.isFinite(row[mode]?.[resolution]) || row[mode][resolution] <= 0) {
-          fail("GPU " + row.model + " has invalid " + mode + " score for " + resolution);
+        const value = row[mode]?.[resolution];
+        if (mode === "raster" && (!Number.isFinite(value) || value <= 0)) {
+          fail("GPU " + row.model + " has invalid required raster score for " + resolution);
+        } else if (value != null && (!Number.isFinite(value) || value <= 0)) {
+          fail("GPU " + row.model + " has invalid optional " + mode + " score for " + resolution);
         }
       }
     }
