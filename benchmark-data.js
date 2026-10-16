@@ -7,7 +7,7 @@
    Updated: 2026-10-16. Scores may change when the source retests hardware.
 */
 window.PVL_BENCHMARKS = {
-  schemaVersion: 2,
+  schemaVersion: 3,
   updatedAt: "2026-10-16",
   source: "PassMark CPU single-thread; Tom's Hardware GPU Hierarchy 2026",
   cpuSingleThread: [
@@ -30,6 +30,37 @@ window.PVL_BENCHMARKS = {
     { model: "Intel Core i5-13600K", aliases: ["Core i5-13600K", "Intel Core i5-13600K", "13th Gen Intel(R) Core(TM) i5-13600K"], score: 4110, source: "https://www.cpubenchmark.net/cpu.php?cpu=Intel+Core+i5-13600K&id=5008", confidence: "measured" },
     { model: "Intel Core i7-13700K", aliases: ["Core i7-13700K", "Intel Core i7-13700K", "13th Gen Intel(R) Core(TM) i7-13700K"], score: 4326, source: "https://www.cpubenchmark.net/cpu.php?cpu=Intel+Core+i7-13700K", confidence: "measured" },
     { model: "AMD Ryzen 9 9950X3D", aliases: ["Ryzen 9 9950X3D", "AMD Ryzen 9 9950X3D 16-Core Processor"], score: 4737, source: "https://www.cpubenchmark.net/cpu.php?cpu=AMD+Ryzen+9+9950X3D&id=6549", confidence: "measured" }
+  ],
+  cpuGaming: [
+    { model: "AMD Ryzen 7 9800X3D", aliases: ["Ryzen 7 9800X3D"], score: 97, source: "https://www.tomshardware.com/reviews/cpu-hierarchy,4312.html", suite: "Tom's Hardware CPU Hierarchy 2026 gaming, 1080p, 17-game geometric mean" },
+    { model: "AMD Ryzen 9 9950X3D", aliases: ["Ryzen 9 9950X3D"], score: 95.7, source: "https://www.tomshardware.com/reviews/cpu-hierarchy,4312.html", suite: "Tom's Hardware CPU Hierarchy 2026 gaming, 1080p, 17-game geometric mean" },
+    { model: "AMD Ryzen 7 7800X3D", aliases: ["Ryzen 7 7800X3D"], score: 85.6, source: "https://www.tomshardware.com/reviews/cpu-hierarchy,4312.html", suite: "Tom's Hardware CPU Hierarchy 2026 gaming, 1080p, 17-game geometric mean" },
+    { model: "Intel Core i7-14700KF", aliases: ["Core i7-14700KF", "Intel Core i7-14700KF", "Core i7-14700K", "Intel Core i7-14700K"], score: 76.4, source: "https://www.tomshardware.com/reviews/cpu-hierarchy,4312.html", suite: "Tom's Hardware CPU Hierarchy 2026 gaming, 1080p, 17-game geometric mean" },
+    { model: "Intel Core i7-13700K", aliases: ["Core i7-13700K", "Intel Core i7-13700K"], score: 75.8, source: "https://www.tomshardware.com/reviews/cpu-hierarchy,4312.html", suite: "Tom's Hardware CPU Hierarchy 2026 gaming, 1080p, 17-game geometric mean" },
+    { model: "Intel Core i5-13600K", aliases: ["Core i5-13600K", "Intel Core i5-13600K"], score: 70.9, source: "https://www.tomshardware.com/reviews/cpu-hierarchy,4312.html", suite: "Tom's Hardware CPU Hierarchy 2026 gaming, 1080p, 17-game geometric mean" },
+    { model: "Intel Core i7-12700KF", aliases: ["Core i7-12700KF", "Intel Core i7-12700KF", "Core i7-12700K", "Intel Core i7-12700K"], score: 65.8, source: "https://www.tomshardware.com/reviews/cpu-hierarchy,4312.html", suite: "Tom's Hardware CPU Hierarchy 2026 gaming, 1080p, 17-game geometric mean" }
+  ],
+  cpuAppSingleThread: [
+    { model: "AMD Ryzen 9 9950X3D", aliases: ["Ryzen 9 9950X3D"], score: 92.8, source: "https://www.tomshardware.com/reviews/cpu-hierarchy,4312.html", suite: "Tom's Hardware CPU Hierarchy 2026 single-threaded application index" },
+    { model: "AMD Ryzen 7 9800X3D", aliases: ["Ryzen 7 9800X3D"], score: 87.6, source: "https://www.tomshardware.com/reviews/cpu-hierarchy,4312.html", suite: "Tom's Hardware CPU Hierarchy 2026 single-threaded application index" },
+    { model: "AMD Ryzen 7 7800X3D", aliases: ["Ryzen 7 7800X3D"], score: 77.3, source: "https://www.tomshardware.com/reviews/cpu-hierarchy,4312.html", suite: "Tom's Hardware CPU Hierarchy 2026 single-threaded application index" },
+    { model: "Intel Core i7-14700KF", aliases: ["Core i7-14700KF", "Intel Core i7-14700KF", "Core i7-14700K", "Intel Core i7-14700K"], score: 90.1, source: "https://www.tomshardware.com/reviews/cpu-hierarchy,4312.html", suite: "Tom's Hardware CPU Hierarchy 2026 single-threaded application index" },
+    { model: "Intel Core i7-13700K", aliases: ["Core i7-13700K", "Intel Core i7-13700K"], score: 86.7, source: "https://www.tomshardware.com/reviews/cpu-hierarchy,4312.html", suite: "Tom's Hardware CPU Hierarchy 2026 single-threaded application index" },
+    { model: "Intel Core i5-13600K", aliases: ["Core i5-13600K", "Intel Core i5-13600K"], score: 82.4, source: "https://www.tomshardware.com/reviews/cpu-hierarchy,4312.html", suite: "Tom's Hardware CPU Hierarchy 2026 single-threaded application index" },
+    { model: "AMD Ryzen 7 5700X", aliases: ["Ryzen 7 5700X", "AMD Ryzen 7 5700X 8-Core Processor"], score: 67, source: "https://www.tomshardware.com/reviews/cpu-hierarchy,4312.html", suite: "Tom's Hardware CPU Hierarchy 2026 single-threaded application index" },
+    { model: "AMD Ryzen 7 5800X3D", aliases: ["Ryzen 7 5800X3D", "AMD Ryzen 7 5800X3D 8-Core Processor"], score: 65.9, source: "https://www.tomshardware.com/reviews/cpu-hierarchy,4312.html", suite: "Tom's Hardware CPU Hierarchy 2026 single-threaded application index" },
+    { model: "Intel Core i5-12400F", aliases: ["Core i5-12400F", "Intel Core i5-12400F", "12th Gen Intel(R) Core(TM) i5-12400F"], score: 69.5, source: "https://www.tomshardware.com/reviews/cpu-hierarchy,4312.html", suite: "Tom's Hardware CPU Hierarchy 2026 single-threaded application index" }
+  ],
+  cpuAppMultiThread: [
+    { model: "AMD Ryzen 9 9950X3D", aliases: ["Ryzen 9 9950X3D"], score: 96.2, source: "https://www.tomshardware.com/reviews/cpu-hierarchy,4312.html", suite: "Tom's Hardware CPU Hierarchy 2026 multi-threaded application index" },
+    { model: "AMD Ryzen 7 9800X3D", aliases: ["Ryzen 7 9800X3D"], score: 54.7, source: "https://www.tomshardware.com/reviews/cpu-hierarchy,4312.html", suite: "Tom's Hardware CPU Hierarchy 2026 multi-threaded application index" },
+    { model: "AMD Ryzen 7 7800X3D", aliases: ["Ryzen 7 7800X3D"], score: 42.8, source: "https://www.tomshardware.com/reviews/cpu-hierarchy,4312.html", suite: "Tom's Hardware CPU Hierarchy 2026 multi-threaded application index" },
+    { model: "Intel Core i7-14700KF", aliases: ["Core i7-14700KF", "Intel Core i7-14700KF", "Core i7-14700K", "Intel Core i7-14700K"], score: 72.2, source: "https://www.tomshardware.com/reviews/cpu-hierarchy,4312.html", suite: "Tom's Hardware CPU Hierarchy 2026 multi-threaded application index" },
+    { model: "Intel Core i7-13700K", aliases: ["Core i7-13700K", "Intel Core i7-13700K"], score: 64.5, source: "https://www.tomshardware.com/reviews/cpu-hierarchy,4312.html", suite: "Tom's Hardware CPU Hierarchy 2026 multi-threaded application index" },
+    { model: "Intel Core i5-13600K", aliases: ["Core i5-13600K", "Intel Core i5-13600K"], score: 48.3, source: "https://www.tomshardware.com/reviews/cpu-hierarchy,4312.html", suite: "Tom's Hardware CPU Hierarchy 2026 multi-threaded application index" },
+    { model: "AMD Ryzen 7 5700X", aliases: ["Ryzen 7 5700X", "AMD Ryzen 7 5700X 8-Core Processor"], score: 29.5, source: "https://www.tomshardware.com/reviews/cpu-hierarchy,4312.html", suite: "Tom's Hardware CPU Hierarchy 2026 multi-threaded application index" },
+    { model: "AMD Ryzen 7 5800X3D", aliases: ["Ryzen 7 5800X3D", "AMD Ryzen 7 5800X3D 8-Core Processor"], score: 33.3, source: "https://www.tomshardware.com/reviews/cpu-hierarchy,4312.html", suite: "Tom's Hardware CPU Hierarchy 2026 multi-threaded application index" },
+    { model: "Intel Core i5-12400F", aliases: ["Core i5-12400F", "Intel Core i5-12400F", "12th Gen Intel(R) Core(TM) i5-12400F"], score: 24, source: "https://www.tomshardware.com/reviews/cpu-hierarchy,4312.html", suite: "Tom's Hardware CPU Hierarchy 2026 multi-threaded application index" }
   ],
   gpuGaming: [
     { model: "NVIDIA GeForce RTX 5090", aliases: ["GeForce RTX 5090","RTX 5090"], raster: { "1080p": 100, "1440p": 100, "4k": 100 }, rayTracing: { "1080p": 100, "1440p": 100, "4k": 100 }, source: "https://www.tomshardware.com/reviews/gpu-hierarchy,4388.html" },
