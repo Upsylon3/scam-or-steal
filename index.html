@@ -26,6 +26,7 @@ label{display:block;font-size:.78rem;font-weight:650;color:var(--muted);margin-b
 .bar{height:6px;background:var(--line);border-radius:9px;overflow:hidden;margin-top:5px}.bar i{display:block;height:100%;background:var(--acc)}.num{font-weight:800}.k{font-size:.7rem;color:var(--muted)}
 .bd{display:inline-block;font-size:.7rem;font-weight:750;padding:2px 8px;border-radius:99px;background:color-mix(in srgb,var(--good) 15%,var(--panel));color:var(--good);margin-left:6px}
 .act{grid-column:2/-1;display:flex;gap:6px;flex-wrap:wrap;align-items:center}.act .btn{padding:5px 10px;font-size:.78rem}.fav{color:var(--warn)}.det{grid-column:2/-1;font-size:.8rem;color:var(--muted);background:var(--soft);padding:10px 12px;border-radius:9px}
+.table-title-row{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap}.table-toolbar{display:flex;align-items:end;gap:12px;flex-wrap:wrap;margin:14px 0 8px}.table-search{flex:1;min-width:230px}.table-filter{width:190px}.table-toolbar label{margin-bottom:4px}.table-count{white-space:nowrap}.table-viewport{max-height:72vh;overflow:auto;border:1px solid var(--line);border-radius:9px;background:var(--panel)}.data-grid{border-collapse:separate;border-spacing:0;width:max-content;min-width:100%;font-size:.78rem;font-variant-numeric:tabular-nums}.data-grid th,.data-grid td{padding:8px 9px;text-align:left;vertical-align:middle;border-right:1px solid var(--line);border-bottom:1px solid var(--line);white-space:nowrap}.data-grid th{position:sticky;top:0;z-index:3;background:var(--soft);color:var(--muted);font-weight:750}.data-grid thead .group-row th{top:0;text-align:center;background:var(--panel);font-size:.7rem;text-transform:uppercase;letter-spacing:.05em}.data-grid thead tr:nth-child(2) th{top:30px}.data-grid th:first-child,.data-grid td:first-child{position:sticky;left:0;z-index:2;background:var(--panel);min-width:220px;max-width:300px;white-space:normal}.data-grid thead tr:nth-child(2) th:first-child{z-index:5;background:var(--soft)}.data-grid thead .group-row th:first-child{z-index:5}.data-grid tbody tr:nth-child(even) td{background:color-mix(in srgb,var(--soft) 55%,var(--panel))}.data-grid tbody tr:hover td{background:color-mix(in srgb,var(--acc) 7%,var(--panel))}.data-grid tbody td:first-child{font-weight:650}.data-grid .numeric{text-align:right}.data-grid .table-sort{border:0;padding:0;background:transparent;color:inherit;font:inherit;text-align:inherit;white-space:nowrap}.data-grid .table-sort:hover{color:var(--acc)}.data-grid .table-actions{display:flex;gap:4px;align-items:center}.data-grid .table-actions .btn{padding:4px 7px;font-size:.72rem}.data-grid .table-hardware{font-size:.72rem;color:var(--muted);font-weight:400}.table-star{border:0;background:none;color:var(--warn);padding:0 2px;font-size:1rem}.table-empty{padding:24px;text-align:center;color:var(--muted)}@media(max-width:700px){.table-filter{width:100%}.table-search{min-width:100%}.table-title-row .btn{width:100%}.table-viewport{max-height:68vh}}
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0}.steps div{background:var(--soft);border-radius:10px;padding:12px;font-size:.85rem}.steps b{display:block;color:var(--acc)}
 .empty{text-align:center;padding:26px 8px}.off{opacity:.55}.bd.no{background:color-mix(in srgb,var(--bad) 14%,var(--panel));color:var(--bad)}.bd.su{background:color-mix(in srgb,var(--acc) 13%,var(--panel));color:var(--acc)}details{margin-top:16px}summary{cursor:pointer;font-weight:650;color:var(--acc)}
 input[type=range]{padding:0;accent-color:var(--acc)}.rh{display:flex;justify-content:space-between;font-size:.82rem;font-weight:650;margin-bottom:3px}
@@ -35,9 +36,9 @@ footer{color:var(--muted);font-size:.75rem;margin-top:26px;text-align:center}foo
 @media(max-width:700px){.g{grid-template-columns:1fr}.steps{grid-template-columns:1fr}.item{grid-template-columns:28px 1fr 74px}.item .pf{grid-column:2/-1;grid-row:2}.item .pr{display:none}.act,.det{grid-column:1/-1}}
 </style></head><body>
 <div class="wrap">
-<header><div class="top"><div class="brand">Scam or Steal<small>Which used PC is actually worth its price?</small></div>
+<header><div class="top"><div class="brand">Scam or Steal<small>Used-PC value comparison · FPS suite estimates v2.4</small></div>
 <div class="row"><button class="btn gh" data-act="help">? How it works</button><button class="btn gh" data-act="theme">◐</button></div></div>
-<nav id="nav"><button data-tab="compare">Compare</button><button data-tab="add">Add a PC</button><button data-tab="settings">Settings</button><button data-tab="admin" id="adminTab" hidden>Admin</button></nav></header>
+<nav id="nav"><button data-tab="compare">Compare</button><button data-tab="table">Table</button><button data-tab="versus">Versus</button><button data-tab="add">Add a PC</button><button data-tab="settings">Settings</button><button data-tab="admin" id="adminTab" hidden>Admin</button></nav></header>
 
 <section id="t-compare" hidden>
  <div id="welcome" class="card empty" hidden><h2>Welcome 👋</h2><p class="lead">Rank used-PC listings by real performance per euro. Three steps:</p>
@@ -51,6 +52,8 @@ footer{color:var(--muted);font-size:.75rem;margin-top:26px;text-align:center}foo
    <div class="row" style="gap:4px 22px;margin:2px 0 2px"><label class="chk"><input type="checkbox" id="optAvail"> Available only</label><label class="chk" title="Hides any listing that costs more than a more powerful one (same price stays)"><input type="checkbox" id="optWorth"> Logically worth only</label></div><div class="hint" id="viewNote" style="margin:2px 0 6px"></div><div id="list"></div><p class="hint">Performance = % of your yardstick PC (see Settings). Value = how good the deal is, 100 = best among the available listings. Prices are net of any included setup.</p></div>
  </div></section>
 
+<section id="t-table" hidden><div class="card table-card"><div class="table-title-row"><div><h2>Listing spreadsheet</h2><p class="lead">A full, sortable data grid for every saved PC. Click any column heading to sort; scroll horizontally for the full hardware and scoring breakdown.</p></div><button class="btn" data-act="tableExport">Export visible rows to CSV</button></div><div class="table-toolbar"><div class="table-search"><label for="tableSearch">Search listings</label><input id="tableSearch" type="search" placeholder="Name, CPU, GPU, RAM, price…"></div><div class="table-filter"><label for="tableFilter">Show</label><select id="tableFilter"><option value="all">All listings</option><option value="available">Available only</option><option value="unavailable">Unavailable only</option><option value="favorites">Favourites only</option></select></div><div id="tableCount" class="hint" aria-live="polite"></div></div><p class="hint">CPU percentages are relative to your yardstick and use PassMark single-/multi-thread evidence. Gaming profiles use resolution- and graphics-mode-specific GPU game-suite indices where available; PassMark is shown separately. GPU suite FPS is an estimated multi-game geometric mean, not an individual-game prediction. “Proxy” means no curated CPU single-thread score is available, so the model falls back to CPU Mark. Evidence quality is shown per row. Value / 100 is normalized against the best available listing.</p><div id="tableBody" class="table-viewport"></div></div></section>
+<section id="t-versus" hidden><div class="card"><h2>Versus</h2><p class="lead">Compare two saved PCs by performance, effective price and performance per euro. Differences within ±5% are treated as roughly equal.</p><div class="g"><div><label for="versusA">First PC</label><select id="versusA"></select></div><div><label for="versusB">Second PC</label><select id="versusB"></select></div></div><div id="versusBody" style="margin-top:14px"></div></div></section>
 <section id="t-add" hidden><div class="card"><h2 id="fTitle">Add a PC</h2><p class="lead">Only CPU, GPU and price are needed. Everything else is optional.</p>
  <form id="form" novalidate><div class="g">
   <div class="full"><label>Listing name or link <span style="font-weight:400">(optional)</span></label><input id="f_name" placeholder="Paste the ad link or type a name"></div>
@@ -65,10 +68,10 @@ footer{color:var(--muted);font-size:.75rem;margin-top:26px;text-align:center}foo
 
 <section id="t-settings" hidden>
  <div class="card" id="acCard" hidden><h2>Account <span class="k" style="font-weight:500">(optional)</span></h2><div id="acBody"></div></div>
- <div class="card"><h2>Your yardstick</h2><p class="lead">The PC that counts as 100%. Every listing is scored as a % of it. Most people can leave this alone.</p>
+ <div class="card"><h2>Your yardstick</h2><p class="lead">The PC that counts as 100%. Every listing is scored as a % of it. Gaming GPU comparisons use compatible native-resolution test suites when available; CPU performance remains a synthetic benchmark-based estimate. Most people can leave this alone.</p>
   <div class="chip" style="margin-bottom:12px"><span id="refNow"></span><button class="btn gh" data-act="refReset">Reset to default</button></div>
   <div class="g"><div><label>Change reference CPU</label><div id="pkRefCpu"></div></div><div><label>Change reference GPU</label><div id="pkRefGpu"></div></div></div></div>
- <div class="card"><h2>How performance is weighted</h2><p class="lead">Each part counts for as much as a typical 2026 build spends on it, so expensive parts (today: RAM) weigh more.</p>
+ <div class="card"><h2>Performance profile</h2><p class="lead">Choose a workload to change the performance index. Gaming profiles use Tom’s Hardware native-resolution GPU game benchmarks where the GPU and reference GPU are covered; other profiles use PassMark G3D Mark. The separate value score remains market-price based.</p><label for="workloadMode">What matters most?</label><select id="workloadMode"><option value="balanced">Balanced / general use</option><option value="gaming">Gaming</option><option value="competitive">CPU-heavy / competitive gaming</option><option value="gpu">GPU-heavy workloads</option><option value="productivity">CPU-heavy productivity</option></select><div class="g" style="margin-top:12px"><div><label for="gpuResolution">Gaming resolution</label><select id="gpuResolution"><option value="1080p">1080p Ultra</option><option value="1440p">1440p Ultra</option><option value="4k">4K Ultra</option></select></div><div><label for="graphicsMode">Graphics mode</label><select id="graphicsMode"><option value="raster">Rasterization (normal rendering)</option><option value="rayTracing">Ray tracing</option></select></div></div><p class="hint" id="workloadHint"></p><p class="hint">GPU suite FPS is estimated from Tom’s Hardware’s published multi-game geometric-mean FPS for the selected resolution and mode. It is a suite-wide average, not a specific game’s FPS or a guarantee for the complete PC; the source testbed uses a Ryzen 7 9800X3D and excludes upscaling/frame generation. Unsupported GPUs show N/A instead of an invented estimate.</p></div><div class="card"><h2>How value is weighted</h2><p class="lead">Value uses the price shares of a typical build, then divides by effective price after any setup deduction.</p>
   <div id="mktBody"></div>
   <details><summary>Looks</summary><div class="g" style="margin-top:14px" id="sliders"></div></details></div>
  <div class="card"><h2>Listings</h2>
@@ -81,15 +84,20 @@ footer{color:var(--muted);font-size:.75rem;margin-top:26px;text-align:center}foo
  <div id="adLock"><p class="lead">Enter the passphrase to manage shared data.</p><div class="row"><input id="adPass" type="password" style="max-width:260px" placeholder="Passphrase"><button class="btn pri" data-act="unlock">Unlock</button></div></div>
  <div id="adBody" hidden><h3>Default yardstick for everyone</h3><p class="lead">Set your current yardstick (Settings tab) as what every visitor starts with. No GitHub push needed.</p><button class="btn pri" data-act="pubRef">Publish current yardstick</button>
   <h3 style="margin-top:26px">Edit or remove a part</h3><div class="g"><div><label>CPU</label><div id="pkAdCpu"></div></div><div><label>GPU</label><div id="pkAdGpu"></div></div></div>
-  <div class="row" style="margin-top:12px"><input id="adScore" type="number" placeholder="New score" style="max-width:160px"><button class="btn pri" data-act="adSave" disabled>Save for everyone</button><button class="btn dng" data-act="adDel" disabled>Delete shared entry</button><button class="btn gh" data-act="lock">Lock</button></div>
-  <p class="hint">Part editing is switched off: CPU/GPU scores now come from PassMark and refresh every Monday.</p></div></div></section>
+  <div class="row" style="margin-top:12px"><input id="adScore" type="number" placeholder="New score" style="max-width:160px"><button class="btn pri" data-act="adSave">Save for everyone</button><button class="btn dng" data-act="adDel">Delete shared entry</button><button class="btn gh" data-act="lock">Lock</button></div>
+  <p class="hint">PassMark entries refresh every Monday and always win. Use this to fix or remove parts that people added themselves.</p></div></div></section>
 
 <footer id="foot"></footer></div>
-<dialog id="help"><h2>How scoring works</h2><p class="lead">Each PC gets a <b>performance</b> score: CPU, GPU, RAM and storage compared with a top-end yardstick PC, then weighted by how much a typical 2026 build spends on each part. RAM and storage are valued at current market prices per GB, so DDR5 counts for more than DDR4 by what it really costs. <b>Value</b> divides performance by price (minus an included setup), so a cheaper PC can beat a stronger one. Assumed RAM/SSD values are marked with <span class="est">~</span>.</p><button class="btn pri" onclick="this.closest('dialog').close()">Got it</button></dialog>
+<dialog id="help"><h2>How scoring works</h2><p class="lead"><b>Performance</b> compares a PC's CPU and GPU with the yardstick PC for the workload you picked in Settings. <b>Value</b> is separate: CPU, GPU, RAM and storage are weighted by what a typical 2026 build spends on each (DDR5 counts for more than DDR4 because it costs more), then divided by the price minus an included setup, so a cheaper PC can beat a stronger one. Assumed RAM/SSD values are marked with <span class="est">~</span>.</p><button class="btn pri" onclick="this.closest('dialog').close()">Got it</button></dialog>
 <div class="toast" id="toast"></div>
 <script src="builtin-parts.js"></script><script src="config.js"></script>
+<script src="benchmark-data.js?v=20261016-fps24"></script>
+<script src="scoring-engine.js?v=20261016-fps24"></script>
 <script>
-const $=id=>document.getElementById(id),C=window.PVL_CONFIG||{},ON=!!(C.supabaseUrl&&C.supabaseKey),LS=localStorage;
+const $=id=>document.getElementById(id),C=window.PVL_CONFIG||{},ON=!!(C.supabaseUrl&&C.supabaseKey),LS=localStorage,
+ /* The URL is cleaned before use. A trailing slash ("https://x.supabase.co/") makes every request go to "https://x.supabase.co//auth/v1/...",
+    which Supabase answers with "Invalid path specified in request URL"; pasting the REST address by mistake (".../rest/v1") does the same. */
+ BASE=String(C.supabaseUrl||"").trim().replace(/\/+$/,"").replace(/\/(rest|auth)\/v1$/,"").replace(/\/+$/,""),KEY=String(C.supabaseKey||"").trim();
 const jget=(k,d)=>{try{return JSON.parse(LS.getItem(k))??d}catch(e){return d}},jset=(k,v)=>{try{LS.setItem(k,JSON.stringify(v))}catch(e){}};
 const DEF={cpuName:"AMD Ryzen 9 9950X3D",cpu:70098,gpuName:"GeForce RTX 5090",gpu:38864},LOOK={pretty:1,neutral:0,ugly:-1};
 /* ---------- market model ----------
@@ -111,7 +119,7 @@ const COST=(()=>{const b=MARKET.build,c={gpu:b.gpu,cpu:b.cpu,ram:b.ramGB*MARKET.
 const uid=()=>crypto.randomUUID?crypto.randomUUID():Math.random().toString(36).slice(2)+Date.now().toString(36),num=v=>typeof v=="number"&&isFinite(v),
  norm=i=>({...i,ssd:+i.ssd||0,hdd:+i.hdd||0,ramType:i.ramType||"DDR4",favorite:!!i.favorite,id:i.id||uid(),updatedAt:num(i.updatedAt)?i.updatedAt:0}); // updatedAt 0 = "older than any real edit"
 let items=jget("pcvaluelab_items",[]).map(norm),tombs=jget("pvl_tombs",[]).filter(t=>t&&typeof t.id=="string"),localParts={cpu:jget("pcvaluelab_custom_cpus",[]),gpu:jget("pcvaluelab_custom_gpus",[])},
-remote=jget("pvl_remote",{parts:[],ref:null}),P=Object.assign({aes:0,cur:"EUR",ref:null,theme:null,seen:0,avail:true,worth:false,setup:150},jget("pvl_prefs",{})),
+remote=Object.assign({parts:[],ref:null},jget("pvl_remote",{})),P=Object.assign({aes:0,cur:"EUR",ref:null,theme:null,seen:0,avail:true,worth:false,setup:150,workload:"balanced",versusA:null,versusB:null},jget("pvl_prefs",{})),
 parts={cpu:[],gpu:[]},editIdx=-1,editId="",filt="all",admin=sessionStorage.getItem("pvl_admin")||"",tab="compare";
 if(LS.getItem("pcvaluelab_currency"))P.cur=LS.getItem("pcvaluelab_currency");if(LS.getItem("pcvaluelab_theme")&&!P.theme)P.theme=LS.getItem("pcvaluelab_theme");
 const saveP=()=>jset("pvl_prefs",P),saveI=()=>{jset("pcvaluelab_items",items);scheduleSync()}; // every local change is also pushed to the account (debounced), when signed in
@@ -120,7 +128,7 @@ const esc=v=>String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&
 const money=v=>(P.cur=="EUR"?"€":"$")+Number(v).toLocaleString(undefined,{maximumFractionDigits:0}),fmt=n=>Number(n).toLocaleString();
 function toast(m){const t=$("toast");t.textContent=m;t.classList.add("on");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("on"),2600)}
 /* ---------- shared backend ---------- */
-const api=(p,o={})=>fetch(C.supabaseUrl+"/rest/v1/"+p,{...o,headers:{apikey:C.supabaseKey,"Content-Type":"application/json",...(o.headers||{})}});
+const api=(p,o={})=>fetch(BASE+"/rest/v1/"+p,{...o,headers:{apikey:KEY,"Content-Type":"application/json",...(o.headers||{})}});
 const rpc=(n,b)=>api("rpc/"+n,{method:"POST",body:JSON.stringify(b)});
 /* Admin calls report WHY they failed. Before, a wrong passphrase, a missing SQL function and a dead network all looked alike
    ("Wrong passphrase", or nothing at all because a network error was never caught), which made a backend problem look like a login bug. */
@@ -138,7 +146,7 @@ async function adminRpc(name,body){let r;try{r=await rpc(name,body)}catch(e){ret
    account owns ONE row in user_listings that holds all its listings as a JSON array. Row-level security (setup.sql) lets only the owner read it.
    Two devices can be edited while apart, so each listing has an id + updatedAt, a deleted listing leaves a tombstone, and merging keeps the
    newest version of every listing. A merge never drops a listing that only one side has. Export / Import backup keeps working with or without an account. */
-const AUTH=C.supabaseUrl+"/auth/v1";
+const AUTH=BASE+"/auth/v1";
 let sess=jget("pvl_session",null),sy={busy:false,queued:false,at:0,err:"",timer:0};
 const sane=e=>e&&typeof e=="object"&&typeof e.id=="string"&&e.id&&(e.deleted===true||(num(e.price)&&e.price>0&&num(e.cpuScore)&&num(e.gpuScore)&&num(e.ram)&&typeof e.cpuName=="string"&&typeof e.gpuName=="string")),
  fp=i=>[i.name,i.cpuName,i.gpuName,i.ram,i.ramType,i.ssd,i.hdd,i.price].join("|").toLowerCase(); // "same listing" test for lists made before ids existed
@@ -159,7 +167,7 @@ function mergeAll(localLive,localTombs,remote){
   rm=new Map(remote.map(e=>[e.id,e])),entries=[...live,...tb],
   stale=entries.some(e=>{const r=rm.get(e.id);return !r||(r.updatedAt||0)!==(e.updatedAt||0)||!!r.deleted!==!!e.deleted});
  return{live,tombs:tb,entries,remoteStale:stale}}
-const authFetch=(path,body,tok)=>fetch(AUTH+path,{method:"POST",headers:{apikey:C.supabaseKey,"Content-Type":"application/json",...(tok?{Authorization:"Bearer "+tok}:{})},body:JSON.stringify(body)});
+const authFetch=(path,body,tok)=>fetch(AUTH+path,{method:"POST",headers:{apikey:KEY,"Content-Type":"application/json",...(tok?{Authorization:"Bearer "+tok}:{})},body:JSON.stringify(body)});
 function setSession(d){sess={access:d.access_token,refresh:d.refresh_token,exp:Date.now()+(d.expires_in||3600)*1000,email:(d.user&&d.user.email)||(sess&&sess.email)||"",uid:(d.user&&d.user.id)||(sess&&sess.uid)||""};jset("pvl_session",sess)}
 function dropSession(msg){sess=null;try{LS.removeItem("pvl_session")}catch(e){}sy.err=msg||"";renderAccount()}
 async function freshToken(){if(!sess)return null;if(sess.exp-Date.now()>60000)return sess.access;
@@ -198,6 +206,7 @@ function authMsg(d,status){const c=d.error_code||d.code||"";
  if(c=="invalid_credentials")return"Wrong email or password.";if(c=="user_already_exists")return"That email already has an account. Sign in instead.";
  if(c=="email_not_confirmed")return"Confirm your email first (check your inbox).";if(c=="signup_disabled")return"Sign-ups are switched off on this Supabase project.";
  if(/rate_limit/.test(c)||status==429)return"Too many attempts. Wait a bit and retry.";
+ if(/invalid path/i.test(d.message||d.msg||""))return"Supabase does not recognise the address. Check supabaseUrl in config.js: it must look like https://xxxx.supabase.co with nothing after it.";
  return d.msg||d.error_description||d.message||"Error "+status}
 async function authSubmit(mode){const email=$("acEmail").value.trim(),password=$("acPass").value;
  if(!email||!password)return toast("Enter your email and password");if(mode=="up"&&password.length<6)return toast("Use at least 6 characters");
@@ -214,43 +223,55 @@ function renderAccount(){const c=$("acCard");c.hidden=!ON;if(!ON)return;
   $("acBody").innerHTML=`<p class="lead">Signed in as <b>${esc(sess.email)}</b>. Your listings sync between your devices.</p><div class="row"><button class="btn pri" data-act="syncNow">Sync now</button><button class="btn" data-act="signout">Sign out</button><span class="sp">${st}</span></div>`}
  else $("acBody").innerHTML=`<p class="lead">Sign in to keep your listings in sync between your devices. Without an account everything stays on this device, and Export / Import backup still work.</p><form id="acForm"><div class="g"><div><label>Email</label><input id="acEmail" type="email" autocomplete="username"></div><div><label>Password</label><input id="acPass" type="password" autocomplete="current-password" placeholder="6+ characters"></div></div><div class="row" style="margin-top:12px"><button class="btn pri" type="submit">Sign in</button><button class="btn" type="button" data-act="signup">Create account</button></div></form><div class="err">${esc(sy.err)}</div><p class="hint">Listings already on this device are added to your account the first time you sign in.</p>`}
 
-async function sync(){if(!ON)return;try{const s=await api("app_settings?key=eq.reference&select=value").then(r=>r.json());
- if(Array.isArray(s)&&s[0])remote.ref=s[0].value;jset("pvl_remote",remote);build();renderAll()}catch(e){}}
+async function sync(){if(!ON)return;try{
+ const[s,pp]=await Promise.all([api("app_settings?key=eq.reference&select=value").then(r=>r.json()),api("parts?select=kind,name,score&order=id&limit=1000").then(r=>r.json())]);
+ if(Array.isArray(s)&&s[0])remote.ref=s[0].value;
+ if(Array.isArray(pp))remote.parts=pp.filter(x=>x&&(x.kind=="cpu"||x.kind=="gpu")&&typeof x.name=="string"&&Number.isFinite(+x.score)).map(x=>({kind:x.kind,name:x.name,score:+x.score}));
+ jset("pvl_remote",remote);build();renderAll()}catch(e){}}
 function build(){const m={cpu:new Map(),gpu:new Map()};
- for(const k of["cpu","gpu"]){BUILTIN[k+"s"].forEach(([n,s])=>m[k].set(n.toLowerCase(),[n,s]));}
- 
+ for(const k of["cpu","gpu"]){BUILTIN[k+"s"].forEach(([n,s])=>m[k].set(n.toLowerCase(),[n,s]));
+  // parts people added fill gaps only: a PassMark entry with the same name always wins, so the weekly refresh stays the source of truth
+  [...(remote.parts||[]).filter(p=>p.kind==k).map(p=>[p.name,p.score]),...(localParts[k]||[])].forEach(([n,sc])=>{if(!m[k].has(n.toLowerCase()))m[k].set(n.toLowerCase(),[n,+sc])})}
  parts={cpu:[...m.cpu.values()],gpu:[...m.gpu.values()]};items.forEach(it=>{const c=live("cpu",it.cpuName),g=live("gpu",it.gpuName);if(c!=null)it.cpuScore=c;if(g!=null)it.gpuScore=g})}
 async function addPart(kind,name,score){name=name.trim();if(!(score>=100&&score<=400000)||name.length<2){toast("Enter a valid name and PassMark score");return null}
- if(ON){const r=await api("parts",{method:"POST",headers:{Prefer:"return=minimal"},body:JSON.stringify({kind,name,score})});if(!r.ok&&r.status!=409){toast("Couldn't save, please try again");return null}remote.parts.push({kind,name,score});jset("pvl_remote",remote)}
+ if(ON){const r=await api("parts",{method:"POST",headers:{Prefer:"return=minimal"},body:JSON.stringify({kind,name,score})});if(!r.ok&&r.status!=409){toast("Couldn't save, please try again");return null}(remote.parts=remote.parts||[]).push({kind,name,score});jset("pvl_remote",remote)}
  else{localParts[kind].push([name,score]);jset("pcvaluelab_custom_"+kind+"s",localParts[kind])}
  build();toast(ON?"Added for everyone ✓":"Saved on this device ✓");return[name,score]}
+const isPassmark=(k,n)=>BUILTIN[k+"s"].some(x=>x[0].toLowerCase()==n.toLowerCase());
 /* ---------- part picker ---------- */
-function picker(box,kind,ph,onPick){box.className="pk";box.innerHTML=`<input placeholder="${ph}" autocomplete="off"><ul class="dd" hidden></ul><div class="chip" hidden></div><div class="newp" hidden></div>`;
+function picker(box,kind,ph,onPick,canAdd){box.className="pk";box.innerHTML=`<input placeholder="${ph}" autocomplete="off"><ul class="dd" hidden></ul><div class="chip" hidden></div><div class="newp" hidden></div>`;
  const[inp,dd,chip,np]=["input","ul",".chip",".newp"].map(s=>box.querySelector(s));const o={val:null};
  o.set=p=>{o.val=p;inp.hidden=!!p;chip.hidden=!p;np.hidden=true;dd.hidden=true;if(p){chip.innerHTML=`<span><b>${esc(p[0])}</b> · ${fmt(p[1])}</span><button type="button" title="Change">×</button>`;chip.querySelector("button").onclick=()=>{o.set(null);inp.focus()}}onPick&&onPick(p)};
  const show=()=>{const q=inp.value.toLowerCase().split(/\s+/).filter(Boolean);if(!q.length){dd.hidden=true;return}
   const r=parts[kind].filter(p=>q.every(t=>p[0].toLowerCase().includes(t))).sort((a,b)=>b[1]-a[1]).slice(0,7);
-  dd.innerHTML=r.map((p,i)=>`<li data-i="${i}">${esc(p[0])}<small>${fmt(p[1])}</small></li>`).join("")+`${r.length?"":"<li>No match in PassMark's list</li>"}`;dd.hidden=false;
-  dd.onmousedown=e=>{const li=e.target.closest("li");if(!li)return;e.preventDefault();if(li.dataset.new){dd.hidden=true;np.hidden=false;np.innerHTML=`<label>PassMark score for “${esc(inp.value.trim())}”</label><div class="row"><input type="number" placeholder="e.g. 19256" style="max-width:150px"><button type="button" class="btn pri">${ON?"Add for everyone":"Save"}</button></div><p class="hint">Look it up on cpubenchmark.net / videocardbenchmark.net (CPU Mark / G3D Mark).</p>`;
+  const exact=parts[kind].some(p=>p[0].toLowerCase()==inp.value.trim().toLowerCase());
+  dd.innerHTML=r.map((p,i)=>`<li data-i="${i}">${esc(p[0])}<small>${fmt(p[1])}</small></li>`).join("")+(canAdd&&!exact?`<li data-new="1">+ Add “${esc(inp.value.trim())}” as a new part</li>`:r.length?"":"<li>No match in PassMark's list</li>");dd.hidden=false;
+  dd.onmousedown=e=>{const li=e.target.closest("li");if(!li)return;e.preventDefault();if(!li.dataset.new&&li.dataset.i===undefined)return;if(li.dataset.new){dd.hidden=true;np.hidden=false;np.innerHTML=`<label>PassMark score for “${esc(inp.value.trim())}”</label><div class="row"><input type="number" placeholder="e.g. 19256" style="max-width:150px"><button type="button" class="btn pri">${ON?"Add for everyone":"Save"}</button></div><p class="hint">Look it up on cpubenchmark.net / videocardbenchmark.net (CPU Mark / G3D Mark).</p>`;
    np.querySelector("button").onclick=async()=>{const p=await addPart(kind,inp.value,+np.querySelector("input").value);if(p)o.set(p)}}else o.set(r[+li.dataset.i])}};
  inp.oninput=show;inp.onfocus=show;inp.onblur=()=>setTimeout(()=>dd.hidden=true,150);return o}
-const pk={cpu:picker($("pkCpu"),"cpu","Search e.g. Ryzen 5 5600"),gpu:picker($("pkGpu"),"gpu","Search e.g. RTX 3060"),
+const pk={cpu:picker($("pkCpu"),"cpu","Search e.g. Ryzen 5 5600",null,true),gpu:picker($("pkGpu"),"gpu","Search e.g. RTX 3060",null,true),
  rc:picker($("pkRefCpu"),"cpu","Search a CPU…",p=>{if(p){P.ref={...refNow(),cpuName:p[0],cpu:p[1]};saveP();renderAll();pk.rc.set(null)}}),
  rg:picker($("pkRefGpu"),"gpu","Search a GPU…",p=>{if(p){P.ref={...refNow(),gpuName:p[0],gpu:p[1]};saveP();renderAll();pk.rg.set(null)}}),
  ac:picker($("pkAdCpu"),"cpu","Search a CPU…"),ag:picker($("pkAdGpu"),"gpu","Search a GPU…")};
 /* ---------- scoring ---------- */
 const live=(k,n)=>{const q=String(n||"").toLowerCase(),p=parts[k].find(x=>x[0].toLowerCase()==q);return p?p[1]:null},refNow=()=>{const r={...(P.ref||remote.ref||DEF)},c=live("cpu",r.cpuName),g=live("gpu",r.gpuName);if(c!=null)r.cpu=c;if(g!=null)r.gpu=g;return r};
-/* NOTE: results are named cpuPct/gpuPct/ramPct/stoPct on purpose. They used to be called cpu/gpu/ram/sto, and "ram" got spread over the
-   listing's own RAM size, so a 32 GB DDR5 kit was displayed as "50 GB" (its score). Never reuse a listing field name here. */
-function score(it,ref){const M=MARKET,W=COST.w,
+const WORKLOADS={
+ balanced:{label:"Balanced / general use",cpuShare:.45,gpuShare:.55,singleMix:.45,useGameBenchmarks:false,useCpuGamingBenchmarks:false,useCpuAppBenchmarks:false,hint:"CPU and GPU performance are scored separately; RAM and storage are shown as capacity/value context, not fake FPS."},
+ gaming:{label:"Gaming",cpuShare:.35,gpuShare:.65,singleMix:.75,useGameBenchmarks:true,useCpuGamingBenchmarks:true,useCpuAppBenchmarks:false,hint:"GPU-led gaming profile, with extra weight on CPU single-thread performance as a broad gaming proxy."},
+ competitive:{label:"CPU-heavy / competitive gaming",cpuShare:.60,gpuShare:.40,singleMix:.80,useGameBenchmarks:true,useCpuGamingBenchmarks:true,useCpuAppBenchmarks:false,hint:"CPU-led profile for high-refresh-rate and CPU-limited games. This is not a game-specific FPS prediction."},
+ gpu:{label:"GPU-heavy workloads",cpuShare:.20,gpuShare:.80,singleMix:.20,useGameBenchmarks:false,useCpuGamingBenchmarks:false,useCpuAppBenchmarks:false,hint:"GPU-led compute profile; actual results vary by application and VRAM requirements."},
+ productivity:{label:"CPU-heavy productivity",cpuShare:.75,gpuShare:.25,singleMix:.15,useGameBenchmarks:false,useCpuGamingBenchmarks:false,useCpuAppBenchmarks:true,hint:"CPU throughput-led profile; multi-thread performance dominates the CPU portion."}
+};
+/* Performance scoring deliberately excludes RAM/storage market prices from performance. Those affect capability/fit, not raw CPU/GPU speed. */
+function score(it,ref){const M=MARKET,W=COST.w,profile=WORKLOADS[P.workload]||WORKLOADS.balanced,
  cpu=it.cpuScore/ref.cpu*100,gpu=it.gpuScore/ref.gpu*100,
- /* RAM is measured in market value, not just GB: 32 GB DDR5 is worth what it costs relative to the reference kit, DDR4 and DDR3 less */
  ram=Math.min(100,it.ram*(M.ramPerGB[it.ramType]??M.ramPerGB.DDR4)/(M.ref.ramGB*M.ramPerGB[M.ref.ramType])*100),
  sto=Math.min(100,((it.ssd||0)*M.ssdPerGB+(it.hdd||0)*M.hddPerGB)/(M.ref.ssdGB*M.ssdPerGB)*100),
- idx=Math.max(0,(cpu*W.cpu+gpu*W.gpu+ram*W.ram+sto*W.sto)*(1+(LOOK[it.aesthetic]||0)*P.aes/100)),
- /* an included setup is not part of the PC: take it off the listed price (never below 1, so the value maths cannot divide by zero) */
+ perf=window.PVL_SCORING.score({cpuName:it.cpuName,cpuScore:it.cpuScore,gpuName:it.gpuName,gpuScore:it.gpuScore},ref,{...profile,resolution:P.gpuResolution||"1440p",graphicsMode:P.graphicsMode||"raster"}),
+ valueIdx=Math.max(0,(cpu*W.cpu+gpu*W.gpu+ram*W.ram+sto*W.sto)*(1+(LOOK[it.aesthetic]||0)*P.aes/100)),
+ idx=Math.max(0,perf.idx),
  cut=Math.max(0,Math.min(it.setup?(Number.isFinite(it.setupAmt)?it.setupAmt:P.setup):0,it.price-1)),net=it.price-cut;
- return{cpuPct:cpu,gpuPct:gpu,ramPct:ram,stoPct:sto,idx,cut,net,val:idx/net}}
+ return{cpuPct:perf.cpuPct,cpuPassmarkPct:cpu,cpuBenchmarkType:perf.cpuBenchmarkType,cpuGamingMeasured:perf.cpuGamingMeasured,cpuAppsMeasured:perf.cpuAppsMeasured,gpuPct:perf.gpuPct,gpuPassmarkPct:perf.gpuPassmarkPct,gpuGamingMeasured:perf.gpuGamingMeasured,gpuBenchmarkType:perf.gpuBenchmarkType,gpuResolution:perf.gpuResolution,gpuSuiteFps:perf.gpuSuiteFps,ramPct:ram,stoPct:sto,idx,valueIdx,cut,net,val:valueIdx/net,perfPerEuro:idx/net,cpuSinglePct:perf.cpuSinglePct,cpuMultiPct:perf.cpuMultiPct,cpuSingleScore:perf.cpuSingleScore,cpuSingleMeasured:perf.cpuSingleMeasured,scoreConfidence:perf.confidence,scoreEvidence:perf.evidence,scoreModel:perf.modelVersion}}
 /* ---------- render ---------- */
 const stor=(n)=>n>=1000?(n/1000).toString().replace(/\.0$/,"")+" TB":n+" GB";
 const isAvail=it=>it.available!==false;
@@ -270,27 +291,107 @@ function renderList(){const ref=refNow(),mode=$("sortMode").value;
  const key={value:r=>r.val,perf:r=>r.idx,priceAsc:r=>-r.net,gpu:r=>r.gpuPct,cpu:r=>r.cpuPct,ram:r=>r.ramPct,sto:r=>r.stoPct}[mode];rows.sort((a,b)=>key(b)-key(a));
  $("welcome").hidden=items.length>0;$("cmp").hidden=!items.length;if(!items.length)return;
  const notes=[];if(P.avail&&hidden)notes.push(hidden+" unavailable listing"+(hidden>1?"s":"")+" hidden");if(P.worth&&n0>rows.length)notes.push((n0-rows.length)+" hidden: pricier than a more powerful one");$("viewNote").textContent=notes.join(" · ");
- const top=rows.slice().sort((a,b)=>b.val-a.val)[0];$("hero").style.display=top?"":"none";
+ const top=rows.filter(isAvail).sort((a,b)=>b.val-a.val)[0];$("hero").style.display=top?"":"none";
  $("hero").innerHTML=top?`<div><div class="k">BEST VALUE RIGHT NOW</div><div class="nm" style="font-size:1.1rem">${title(top)}</div><div class="sp">${esc(top.cpuName)} · ${esc(top.gpuName)}</div></div><div style="text-align:right"><div class="num" style="font-size:1.4rem">${money(top.net)}</div><div class="sp">${top.idx.toFixed(0)}% performance</div></div>`:"";
  $("list").innerHTML=rows.length?rows.map((r,n)=>{const est=(t,a)=>a?`<span class="est" title="Assumed: you marked this as unknown">~${t}</span>`:t,av=isAvail(r);
   return`<div class="item${av?"":" off"}"><div class="rk">${n+1}</div><div><div class="nm">${title(r)}${av&&r.val==best?'<span class="bd">Best deal</span>':""}${av?"":'<span class="bd no">Unavailable</span>'}${r.setup?'<span class="bd su">Setup incl.</span>':""}${r.favorite?' <span class="fav">★</span>':""}</div>
-  <div class="sp">${esc(r.cpuName)} · ${esc(r.gpuName)} · ${est(r.ram+" GB "+r.ramType,r.ramUnknown)} · ${est(stor(r.ssd)+" SSD",r.ssdUnknown)}${r.hdd?" + "+stor(r.hdd)+" HDD":""}</div></div>
+  <div class="sp">${esc(r.cpuName)} · ${esc(r.gpuName)} · ${est(r.ram+" GB "+r.ramType,r.ramUnknown)} · ${est(stor(r.ssd)+" SSD",r.ssdUnknown)}${r.hdd?" + "+stor(r.hdd)+" HDD":""}</div>${r.gpuSuiteFps!=null?`<div class="sp" title="Tom’s Hardware multi-game GPU suite estimate; not a per-game or full-PC guarantee"><b>~${Math.round(r.gpuSuiteFps)} suite FPS</b> · ${esc(r.gpuResolution)} ${P.graphicsMode==="rayTracing"?"ray tracing":"raster"}</div>`:""}</div>
   <div class="pf"><div class="num">${r.idx.toFixed(0)}%</div><div class="k">performance</div><div class="bar"><i style="width:${Math.min(100,r.idx)}%"></i></div></div>
   <div class="pr"><div class="num">${money(r.net)}</div><div class="k">${r.cut>0?"−"+money(r.cut)+" setup":"price"}</div></div><div><div class="num">${best?Math.round(r.val/best*100):0}</div><div class="k">value</div></div>
   <div class="act"><button class="btn" data-act="fav" data-i="${r.i}">${r.favorite?"★ Saved":"☆ Save"}</button><button class="btn" data-act="avail" data-i="${r.i}">${av?"Mark unavailable":"Mark available"}</button><button class="btn" data-act="edit" data-i="${r.i}">Edit</button><button class="btn" data-act="det" data-i="${r.i}">Details</button><button class="btn dng" data-act="del" data-i="${r.i}">Delete</button></div>
-  <div class="det" id="det${r.i}" hidden>CPU ${r.cpuPct.toFixed(0)}% (${fmt(r.cpuScore)}) · GPU ${r.gpuPct.toFixed(0)}% (${fmt(r.gpuScore)}) · RAM ${r.ramPct.toFixed(0)}% (${r.ram} GB ${r.ramType}) · Storage ${r.stoPct.toFixed(0)}% · ${(r.val*100).toFixed(1)} performance points per ${P.cur=="EUR"?"€":"$"}100${r.cut>0?`<br>Listed ${money(r.price)} − ${money(r.cut)} setup = ${money(r.net)} for the PC itself`:""}</div></div>`}).join(""):`<div class="empty">Nothing matches this filter.</div>`}
+  <div class="det" id="det${r.i}" hidden>CPU ${r.cpuPct.toFixed(0)}% (${fmt(r.cpuScore)}) · GPU ${r.gpuPct.toFixed(0)}% (${fmt(r.gpuScore)})${r.gpuSuiteFps!=null?` · ~${Math.round(r.gpuSuiteFps)} aggregate suite FPS`:" · FPS estimate unavailable for this GPU"} · RAM ${r.ramPct.toFixed(0)}% (${r.ram} GB ${r.ramType}) · Storage ${r.stoPct.toFixed(0)}% · ${(r.perfPerEuro*100).toFixed(1)} performance points per ${P.cur=="EUR"?"€":"$"}100${r.cut>0?`<br>Listed ${money(r.price)} − ${money(r.cut)} setup = ${money(r.net)} for the PC itself`:""}</div></div>`}).join(""):`<div class="empty">Nothing matches this filter.</div>`}
 function title(r){const n=r.name||"Untitled PC";if(/^https?:\/\//i.test(n)){let h="listing";try{h=new URL(n).hostname.replace(/^www\./,"")}catch(e){}return`<a href="${esc(n)}" target="_blank" rel="noopener" style="color:var(--acc)">${esc(h)} ↗</a>`}return esc(n)}
+const TABLE_COLUMNS=[
+ {key:"name",group:"Listing",label:"PC / listing",numeric:false,sort:r=>(r.name||r.cpuName+" + "+r.gpuName).toLowerCase(),csv:r=>r.name||r.cpuName+" + "+r.gpuName,cell:r=>title(r)},
+ {key:"status",group:"Listing",label:"Availability",numeric:false,sort:r=>isAvail(r)?1:0,csv:r=>isAvail(r)?"Available":"Unavailable",cell:r=>isAvail(r)?'<span class="bd">Available</span>':'<span class="bd no">Unavailable</span>'},
+ {key:"favorite",group:"Listing",label:"★",numeric:false,sort:r=>r.favorite?1:0,csv:r=>r.favorite?"Yes":"No",cell:r=>'<button class="table-star" title="Toggle favourite" aria-label="Toggle favourite" data-act="fav" data-i="'+r.i+'">'+(r.favorite?"★":"☆")+'</button>'},
+ {key:"price",group:"Price",label:"Asking price",numeric:true,sort:r=>r.price,csv:r=>r.price,cell:r=>money(r.price)},
+ {key:"cut",group:"Price",label:"Setup deduction",numeric:true,sort:r=>r.cut,csv:r=>r.cut,cell:r=>r.cut?money(r.cut):"—"},
+ {key:"net",group:"Price",label:"Effective price",numeric:true,sort:r=>r.net,csv:r=>r.net,cell:r=>'<b>'+money(r.net)+'</b>'},
+ {key:"cpuName",group:"CPU",label:"CPU model",numeric:false,sort:r=>r.cpuName.toLowerCase(),csv:r=>r.cpuName,cell:r=>esc(r.cpuName)},
+ {key:"cpuScore",group:"CPU",label:"CPU Mark (multi)",numeric:true,sort:r=>r.cpuScore,csv:r=>r.cpuScore,cell:r=>fmt(r.cpuScore)},
+ {key:"cpuSingleScore",group:"CPU",label:"Single-thread rating",numeric:true,sort:r=>r.cpuSingleScore,csv:r=>r.cpuSingleMeasured?Math.round(r.cpuSingleScore):"PassMark proxy",cell:r=>r.cpuSingleMeasured?fmt(r.cpuSingleScore):"Proxy"},
+ {key:"cpuSinglePct",group:"CPU",label:"Single-thread % yardstick",numeric:true,sort:r=>r.cpuSinglePct,csv:r=>Number(r.cpuSinglePct.toFixed(2)),cell:r=>r.cpuSinglePct.toFixed(1)+"%"},
+ {key:"cpuMultiPct",group:"CPU",label:"Multi-thread % yardstick",numeric:true,sort:r=>r.cpuMultiPct,csv:r=>Number(r.cpuMultiPct.toFixed(2)),cell:r=>r.cpuMultiPct.toFixed(1)+"%"},
+ {key:"cpuPct",group:"CPU",label:"Profile CPU score",numeric:true,sort:r=>r.cpuPct,csv:r=>Number(r.cpuPct.toFixed(2)),cell:r=>r.cpuPct.toFixed(1)+"%"},
+ {key:"cpuPassmarkPct",group:"CPU",label:"CPU Mark % yardstick",numeric:true,sort:r=>r.cpuPassmarkPct,csv:r=>Number(r.cpuPassmarkPct.toFixed(2)),cell:r=>r.cpuPassmarkPct.toFixed(1)+"%"},
+ {key:"cpuBenchmarkType",group:"CPU",label:"CPU benchmark used",numeric:false,sort:r=>r.cpuBenchmarkType,csv:r=>r.cpuBenchmarkType==="tomCpuGaming"?"Tom’s Hardware gaming suite":r.cpuBenchmarkType==="tomCpuApps"?"Tom’s Hardware application suite":"PassMark fallback",cell:r=>r.cpuBenchmarkType==="tomCpuGaming"?'<span class="bd">Game suite</span>':r.cpuBenchmarkType==="tomCpuApps"?'<span class="bd">App suite</span>':'<span class="bd no">PassMark fallback</span>'},
+ {key:"gpuName",group:"GPU",label:"GPU model",numeric:false,sort:r=>r.gpuName.toLowerCase(),csv:r=>r.gpuName,cell:r=>esc(r.gpuName)},
+ {key:"gpuScore",group:"GPU",label:"PassMark score",numeric:true,sort:r=>r.gpuScore,csv:r=>r.gpuScore,cell:r=>fmt(r.gpuScore)},
+ {key:"gpuPct",group:"GPU",label:"Profile GPU %",numeric:true,sort:r=>r.gpuPct,csv:r=>Number(r.gpuPct.toFixed(2)),cell:r=>r.gpuPct.toFixed(1)+"%"},
+ {key:"gpuPassmarkPct",group:"GPU",label:"PassMark % yardstick",numeric:true,sort:r=>r.gpuPassmarkPct,csv:r=>Number(r.gpuPassmarkPct.toFixed(2)),cell:r=>r.gpuPassmarkPct.toFixed(1)+"%"},
+ {key:"gpuBenchmarkType",group:"GPU",label:"GPU benchmark used",numeric:false,sort:r=>r.gpuBenchmarkType,csv:r=>r.gpuBenchmarkType==="passmark"?"PassMark G3D Mark":(r.gpuBenchmarkType==="rayTracing"?"Tom’s Hardware RT":"Tom’s Hardware raster")+" "+r.gpuResolution,cell:r=>r.gpuGamingMeasured?'<span class="bd">Game suite</span>':'<span class="bd no">PassMark fallback</span>'},
+ {key:"gpuSuiteFps",group:"GPU",label:"GPU suite FPS (est.)",numeric:true,sort:r=>r.gpuSuiteFps??-1,csv:r=>r.gpuSuiteFps==null?"":Number(r.gpuSuiteFps.toFixed(1)),cell:r=>r.gpuSuiteFps==null?'<span class="bd no">N/A</span>':"~"+Math.round(r.gpuSuiteFps)+" FPS"},
+ {key:"ram",group:"Memory & storage",label:"RAM",numeric:true,sort:r=>r.ram,csv:r=>r.ram+" GB "+r.ramType,cell:r=>(r.ramUnknown?"~":"")+r.ram+" GB "+esc(r.ramType)},
+ {key:"ramPct",group:"Memory & storage",label:"RAM value index",numeric:true,sort:r=>r.ramPct,csv:r=>Number(r.ramPct.toFixed(2)),cell:r=>r.ramPct.toFixed(1)+"%"},
+ {key:"ssd",group:"Memory & storage",label:"SSD (GB)",numeric:true,sort:r=>r.ssd,csv:r=>r.ssd,cell:r=>(r.ssdUnknown?"~":"")+fmt(r.ssd)},
+ {key:"hdd",group:"Memory & storage",label:"HDD (GB)",numeric:true,sort:r=>r.hdd||0,csv:r=>r.hdd||0,cell:r=>fmt(r.hdd||0)},
+ {key:"stoPct",group:"Memory & storage",label:"Storage value index",numeric:true,sort:r=>r.stoPct,csv:r=>Number(r.stoPct.toFixed(2)),cell:r=>r.stoPct.toFixed(1)+"%"},
+ {key:"idx",group:"Scores",label:"Performance index",numeric:true,sort:r=>r.idx,csv:r=>Number(r.idx.toFixed(2)),cell:r=>'<b>'+r.idx.toFixed(1)+'%</b>'},
+ {key:"valueIdx",group:"Scores",label:"Value index",numeric:true,sort:r=>r.valueIdx,csv:r=>Number(r.valueIdx.toFixed(2)),cell:r=>r.valueIdx.toFixed(2)},
+ {key:"value",group:"Scores",label:"Value / 100",numeric:true,sort:r=>r.val,csv:(r,best)=>best?Math.round(r.val/best*100):0,cell:(r,best)=>'<b>'+(best?Math.round(r.val/best*100):0)+'</b>'},
+ {key:"perfEuro",group:"Scores",label:"Perf pts / 100 currency",numeric:true,sort:r=>r.perfPerEuro,csv:r=>Number((r.perfPerEuro*100).toFixed(3)),cell:r=>(r.perfPerEuro*100).toFixed(2)},
+ {key:"scoreConfidence",group:"Scores",label:"Evidence quality",numeric:false,sort:r=>r.scoreConfidence,csv:r=>r.scoreConfidence+" — "+r.scoreEvidence,cell:r=>r.scoreConfidence==="high"?'<span class="bd">High</span>':r.scoreConfidence==="medium"?'<span class="bd">Medium</span>':'<span class="bd no">Low</span>'},
+ {key:"aesthetic",group:"Details",label:"Looks",numeric:false,sort:r=>r.aesthetic||"neutral",csv:r=>r.aesthetic||"neutral",cell:r=>esc(r.aesthetic||"neutral")},
+ {key:"unknown",group:"Details",label:"Assumed specs",numeric:false,sort:r=>([r.ramUnknown&&"RAM",r.ssdUnknown&&"SSD"].filter(Boolean).join(", ")||"").toLowerCase(),csv:r=>[r.ramUnknown&&"RAM",r.ssdUnknown&&"SSD"].filter(Boolean).join(", "),cell:r=>[r.ramUnknown&&"RAM",r.ssdUnknown&&"SSD"].filter(Boolean).join(", ")||"—"},
+ {key:"actions",group:"Actions",label:"Actions",numeric:false,sort:()=>"",csv:()=>"",cell:r=>'<div class="table-actions"><button class="btn" data-act="edit" data-i="'+r.i+'">Edit</button><button class="btn" data-act="chooseVersus" data-i="'+r.i+'">Versus</button><button class="btn" data-act="avail" data-i="'+r.i+'">'+(isAvail(r)?"Unavailable":"Available")+'</button><button class="btn dng" data-act="del" data-i="'+r.i+'">Delete</button></div>'}
+];
+let tableSortKey="value",tableSortDir=-1;
+function tableRows(){
+ const ref=refNow(),q=($("tableSearch").value||"").trim().toLowerCase(),filter=$("tableFilter").value;
+ let rows=items.map((it,i)=>Object.assign({i},it,score(it,ref)));
+ rows=rows.filter(r=>{
+  if(filter==="available"&&!isAvail(r))return false;
+  if(filter==="unavailable"&&isAvail(r))return false;
+  if(filter==="favorites"&&!r.favorite)return false;
+  if(!q)return true;
+  return [r.name,r.cpuName,r.gpuName,r.ramType,r.aesthetic,r.price,r.ram,r.ssd,r.hdd].some(v=>String(v??"").toLowerCase().includes(q));
+ });
+ const col=TABLE_COLUMNS.find(c=>c.key===tableSortKey)||TABLE_COLUMNS[0];
+ rows.sort((a,b)=>{
+  const av=col.sort(a),bv=col.sort(b);
+  const cmp=typeof av==="string"||typeof bv==="string"?String(av).localeCompare(String(bv),undefined,{numeric:true,sensitivity:"base"}):(av===bv?0:av<bv?-1:1);
+  return cmp*tableSortDir;
+ });
+ return rows;
+}
+function renderTable(){
+ const all=items.map((it,i)=>Object.assign({i},it,score(it,refNow()))),best=Math.max(0,...all.filter(isAvail).map(r=>r.val)),rows=tableRows();
+ $("tableCount").textContent=rows.length+" of "+items.length+" listings";
+ if(!items.length){$("tableBody").innerHTML='<div class="table-empty">No listings yet. Add a PC to get started.</div>';return}
+ if(!rows.length){$("tableBody").innerHTML='<div class="table-empty">No listings match this search or filter.</div>';return}
+ const groups=[];
+ TABLE_COLUMNS.forEach(c=>{const last=groups[groups.length-1];if(last&&last.group===c.group)last.span++;else groups.push({group:c.group,span:1})});
+ const groupHead=groups.map(g=>'<th colspan="'+g.span+'">'+esc(g.group)+'</th>').join("");
+ const colHead=TABLE_COLUMNS.map(c=>'<th class="'+(c.numeric?"numeric":"")+'" aria-sort="'+(tableSortKey===c.key?(tableSortDir===1?"ascending":"descending"):"none")+'"><button type="button" class="table-sort" data-table-sort="'+c.key+'">'+esc(c.label)+(tableSortKey===c.key?(tableSortDir===1?" ↑":" ↓"):"")+'</button></th>').join("");
+ const body=rows.map(r=>'<tr>'+TABLE_COLUMNS.map(c=>'<td class="'+(c.numeric?"numeric":"")+'">'+c.cell(r,best)+'</td>').join("")+'</tr>').join("");
+ $("tableBody").innerHTML='<table class="data-grid"><thead><tr class="group-row">'+groupHead+'</tr><tr>'+colHead+'</tr></thead><tbody>'+body+'</tbody></table>';
+}
+function exportTableCsv(){
+ const rows=tableRows(),all=items.map((it,i)=>Object.assign({i},it,score(it,refNow()))),best=Math.max(0,...all.filter(isAvail).map(r=>r.val));
+ if(!rows.length){toast("No visible rows to export");return}
+ const quote=v=>{let t=String(v??"");if(typeof v=="string"&&/^[=+\-@\t\r]/.test(t))t="'"+t;return'"'+t.replace(/"/g,'""')+'"'};
+ const lines=[TABLE_COLUMNS.filter(c=>c.key!=="actions").map(c=>quote(c.label)).join(",")].concat(rows.map(r=>TABLE_COLUMNS.filter(c=>c.key!=="actions").map(c=>quote(c.csv(r,best))).join(",")));
+ const blob=new Blob(["\uFEFF"+lines.join("\r\n")],{type:"text/csv;charset=utf-8;"});
+ const url=URL.createObjectURL(blob),a=document.createElement("a");
+ a.href=url;a.download="scam-or-steal-listings.csv";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+ toast("CSV export ready");
+}
+function renderVersus(){const ref=refNow(),aSel=$("versusA"),bSel=$("versusB");if(!aSel||!bSel)return;const list=items.map((it,i)=>Object.assign({i},it,score(it,ref)));if(!list.length){aSel.innerHTML=bSel.innerHTML='<option value="">No listings yet</option>';$("versusBody").innerHTML='<div class="empty">Add PCs to compare them.</div>';return}const opts=list.map(r=>'<option value="'+esc(r.id)+'">'+esc(r.name||r.cpuName+" + "+r.gpuName)+' · '+money(r.price)+'</option>').join("");aSel.innerHTML=bSel.innerHTML=opts;if(!list.some(r=>r.id===P.versusA))P.versusA=list[0].id;if(!list.some(r=>r.id===P.versusB))P.versusB=(list[1]||list[0]).id;aSel.value=P.versusA;bSel.value=P.versusB;const a=list.find(r=>r.id===aSel.value),b=list.find(r=>r.id===bSel.value);if(!a||!b||a.id===b.id){$("versusBody").innerHTML='<div class="empty">Choose two different listings to compare them.</div>';return}const delta=(a.perfPerEuro/b.perfPerEuro-1)*100,abs=Math.abs(delta),winner=abs<=5?"About equal":delta>0?"PC A offers more performance per euro":"PC B offers more performance per euro";$("versusBody").innerHTML='<div class="g"><div class="card"><h3>PC A · '+title(a)+'</h3><p>'+esc(a.cpuName)+' · '+esc(a.gpuName)+'</p><h2>'+money(a.net)+'</h2><p>'+a.idx.toFixed(1)+'% workload index</p></div><div class="card"><h3>PC B · '+title(b)+'</h3><p>'+esc(b.cpuName)+' · '+esc(b.gpuName)+'</p><h2>'+money(b.net)+'</h2><p>'+b.idx.toFixed(1)+'% workload index</p></div></div><div class="card"><h2>'+winner+'</h2><p class="lead">Performance per euro: PC A '+a.perfPerEuro.toFixed(4)+' · PC B '+b.perfPerEuro.toFixed(4)+'. Difference: '+(delta>0?"+":"")+delta.toFixed(1)+'%. Differences within ±5% are considered roughly equal; condition, PSU, warranty and noise may matter more.</p><p>Price-share value indices: '+a.valueIdx.toFixed(1)+' vs '+b.valueIdx.toFixed(1)+'.</p></div>'}
 function renderSettings(){const r=refNow();$("refNow").innerHTML=`<span><b>${esc(r.cpuName)}</b> ${fmt(r.cpu)} · <b>${esc(r.gpuName)}</b> ${fmt(r.gpu)} ${P.ref?"(yours)":"(default)"}</span>`;
  const b=MARKET.build,R=MARKET.ramPerGB,L={gpu:"Graphics card",cpu:"Processor",ram:`RAM (${b.ramGB} GB ${b.ramType})`,sto:`Storage (${b.ssdGB>=1000?b.ssdGB/1000+" TB":b.ssdGB+" GB"} SSD)`};
  $("mktBody").innerHTML=["gpu","cpu","ram","sto"].map(k=>`<div style="margin-bottom:10px"><div class="rh"><span>${L[k]} <span style="font-weight:400;color:var(--muted)">· about $${Math.round(COST.c[k])}</span></span><span>${Math.round(COST.w[k]*100)}%</span></div><div class="bar"><i style="width:${COST.w[k]*100}%"></i></div></div>`).join("")+
   `<p class="hint">RAM per GB: DDR3 $${R.DDR3} · DDR4 $${R.DDR4} · DDR5 $${R.DDR5} (DDR5 costs ${(R.DDR5/R.DDR4).toFixed(1)}× DDR4). SSD $${Math.round(MARKET.ssdPerGB*1000)}/TB, HDD $${Math.round(MARKET.hddPerGB*1000)}/TB. US retail prices, ${esc(MARKET.asOf)}.</p>`;
- $("sliders").innerHTML=`<div><div class="rh"><span>Looks influence</span><span>${P.aes}%</span></div><input type="range" min="0" max="15" value="${P.aes}" data-k="aes"></div>`;
+ const wm=$("workloadMode");if(wm){wm.value=P.workload||"balanced";$("workloadHint").textContent=(WORKLOADS[P.workload]||WORKLOADS.balanced).hint}if($("gpuResolution"))$("gpuResolution").value=P.gpuResolution||"1440p";if($("graphicsMode"))$("graphicsMode").value=P.graphicsMode||"raster";
+ const sl=$("sliders");if(!sl.firstChild)sl.innerHTML=`<div><div class="rh"><span>Looks influence value</span><span id="aesVal"></span></div><input type="range" min="0" max="15" data-k="aes"></div>`;
+ $("aesVal").textContent=P.aes+"%";sl.querySelector("input").value=P.aes; // updated in place: replacing the input mid-drag made it stop after one step
+ 
  if(document.activeElement!==$("setupDef"))$("setupDef").value=P.setup;
  document.querySelectorAll("#cur button").forEach(b=>b.classList.toggle("on",b.dataset.c==P.cur));
  document.querySelectorAll(".cur").forEach(e=>e.textContent=P.cur=="EUR"?"€":"$")}
-function renderAll(){$("optAvail").checked=P.avail;$("optWorth").checked=P.worth;renderList();renderSettings();$("adminTab").hidden=!admin;$("adLock").hidden=!!admin;$("adBody").hidden=!admin;
- $("foot").innerHTML=`Your listings stay on your device. CPU/GPU scores come from PassMark and refresh every Monday. · <a href="#admin" data-tab="admin">Admin</a>`}
-function go(t){tab=t;["compare","add","settings","admin"].forEach(x=>$("t-"+x).hidden=x!=t);document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.tab==t));history.replaceState(null,"","#"+t);scrollTo(0,0)}
+function renderAll(){$("optAvail").checked=P.avail;$("optWorth").checked=P.worth;renderList();renderTable();renderVersus();renderSettings();$("adminTab").hidden=!admin;$("adLock").hidden=!!admin;$("adBody").hidden=!admin;
+ $("foot").innerHTML=`${sess?"Your listings sync with your account.":"Your listings stay on your device."} CPU/GPU scores come from PassMark and refresh every Monday. · <a href="#admin" data-tab="admin">Admin</a>`}
+function go(t){tab=t;["compare","table","versus","add","settings","admin"].forEach(x=>$("t-"+x).hidden=x!=t);document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.tab==t));history.replaceState(null,"","#"+t);scrollTo(0,0)}
 /* ---------- form ---------- */
 function unk(cb,inp,val,sel){cb.onchange=()=>{inp.disabled=cb.checked;if(sel){sel.disabled=cb.checked;if(cb.checked)sel.value="DDR4"}inp.value=cb.checked?val:""}}
 unk($("f_ramU"),$("f_ram"),16,$("f_ramType"));unk($("f_ssdU"),$("f_ssd"),1000);
@@ -311,11 +412,11 @@ function edit(i){const it=items[i];go("add");resetForm();editIdx=i;editId=it.id;
 const A={help:()=>$("help").showModal(),theme:()=>{P.theme=document.documentElement.dataset.theme=="dark"?"light":"dark";document.documentElement.dataset.theme=P.theme;saveP()},
  goadd:()=>go("add"),cancel:()=>{resetForm()},refReset:()=>{P.ref=null;saveP();renderAll()},
  sample:()=>{items=[["Ryzen 5 5600 + RTX 3060","AMD Ryzen 5 5600",21000,"NVIDIA GeForce RTX 3060",17000,16,"DDR4",500,450],["Core i7-12700 + RX 6700 XT","Intel Core i7-12700",30000,"Radeon RX 6700 XT",19840,32,"DDR4",1000,600],["Ryzen 7 7800X3D + RX 7800 XT","AMD Ryzen 7 7800X3D",34280,"Radeon RX 7800 XT",24226,32,"DDR5",1000,1100]].map(a=>({name:a[0],cpuName:a[1],cpuScore:a[2],gpuName:a[3],gpuScore:a[4],ram:a[5],ramType:a[6],ssd:a[7],hdd:0,price:a[8],aesthetic:"neutral",favorite:false,id:uid(),updatedAt:Date.now()}));saveI();renderAll()},
- fav:i=>{items[i].favorite=!items[i].favorite;items[i].updatedAt=Date.now();saveI();renderAll()},avail:i=>{items[i].available=items[i].available===false;items[i].updatedAt=Date.now();saveI();renderAll()},
+ fav:i=>{items[i].favorite=!items[i].favorite;items[i].updatedAt=Date.now();saveI();renderAll()},chooseVersus:i=>{const id=items[i]&&items[i].id;if(!id)return;if(!P.versusA||P.versusA===id){P.versusA=id;P.versusB=items.find(x=>x.id!==id)?.id||id}else P.versusB=id;saveP();go("versus");renderVersus()},avail:i=>{items[i].available=items[i].available===false;items[i].updatedAt=Date.now();saveI();renderAll()},
  signup:()=>authSubmit("up"),syncNow:()=>cloudSync(),signout:signOut,edit,det:i=>{$("det"+i).hidden=!$("det"+i).hidden},
  del:i=>{if(confirm("Delete this PC?")){tomb(items[i]);items.splice(i,1);saveI();renderAll()}},clear:()=>{if(items.length&&confirm("Delete all "+items.length+" listings?")){items.forEach(tomb);items=[];saveI();renderAll()}},
  export:()=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify({version:4,exportedAt:new Date().toISOString(),items,customCPUs:localParts.cpu,customGPUs:localParts.gpu,settings:{setupDefault:P.setup,aestheticWeight:P.aes,refCpuScore:refNow().cpu,refGpuScore:refNow().gpu}},null,2)],{type:"application/json"}));a.download="pc-value-lab-backup.json";a.click()},
- import:()=>$("impFile").click(),
+ import:()=>$("impFile").click(),tableExport:exportTableCsv,
  unlock:async()=>{const p=$("adPass").value;if(!ON)return toast("Connect Supabase first (config.js)");if(!p)return toast("Enter the passphrase");
   const x=await adminRpc("admin_check",{p});if(!x.ok)return toast(x.why);
   if(x.data!==true)return toast("Wrong passphrase"); // the function answered, and said no
@@ -323,27 +424,28 @@ const A={help:()=>$("help").showModal(),theme:()=>{P.theme=document.documentElem
  lock:()=>{admin="";sessionStorage.removeItem("pvl_admin");renderAll()},
  pubRef:async()=>{const r=refNow(),x=await adminRpc("admin_set_reference",{p:admin,cpu_name:r.cpuName,cpu_score:Math.round(r.cpu),gpu_name:r.gpuName,gpu_score:Math.round(r.gpu)}); // the SQL columns are integers
   toast(x.ok?"Default updated for everyone ✓":x.why);if(x.ok){P.ref=null;saveP();sync()}},
- adSave:async()=>{const s=+$("adScore").value,t=[["cpu",pk.ac.val],["gpu",pk.ag.val]].find(x=>x[1]);if(!t||!(s>=100))return toast("Pick a part and enter a score");const x=await rpc("admin_upsert_part",{p:admin,k:t[0],n:t[1][0],s});toast(x.ok?"Saved ✓":"Failed");sync()},
- adDel:async()=>{const t=[["cpu",pk.ac.val],["gpu",pk.ag.val]].find(x=>x[1]);if(!t)return toast("Pick a part first");const x=await rpc("admin_delete_part",{p:admin,k:t[0],n:t[1][0]});if(x.ok){remote.parts=remote.parts.filter(p=>!(p.kind==t[0]&&p.name.toLowerCase()==t[1][0].toLowerCase()));build()}toast(x.ok?"Removed ✓":"Failed");sync()}};
-document.addEventListener("click",e=>{const t=e.target.closest("[data-tab]");if(t){e.preventDefault();return go(t.dataset.tab)}
+ adSave:async()=>{const s=+$("adScore").value,t=[["cpu",pk.ac.val],["gpu",pk.ag.val]].find(x=>x[1]);if(!t||!(s>=100))return toast("Pick a part and enter a score");if(isPassmark(t[0],t[1][0]))return toast("That is a PassMark entry. It refreshes every Monday and can't be edited here.");const x=await adminRpc("admin_upsert_part",{p:admin,k:t[0],n:t[1][0],s:Math.round(s)});toast(x.ok?"Saved ✓":x.why);sync()},
+ adDel:async()=>{const t=[["cpu",pk.ac.val],["gpu",pk.ag.val]].find(x=>x[1]);if(!t)return toast("Pick a part first");if(isPassmark(t[0],t[1][0]))return toast("That is a PassMark entry. It refreshes every Monday and can't be removed here.");const x=await adminRpc("admin_delete_part",{p:admin,k:t[0],n:t[1][0]});if(x.ok){remote.parts=remote.parts.filter(p=>!(p.kind==t[0]&&p.name.toLowerCase()==t[1][0].toLowerCase()));build()}toast(x.ok?"Removed ✓":x.why);sync()}};
+document.addEventListener("click",e=>{const sort=e.target.closest("[data-table-sort]");if(sort){const key=sort.dataset.tableSort;if(tableSortKey===key)tableSortDir*=-1;else{tableSortKey=key;tableSortDir=(["name","cpuName","gpuName","aesthetic","unknown"].includes(key)?1:(["price","cut","net"].includes(key)?1:-1))}return renderTable()}const t=e.target.closest("[data-tab]");if(t){e.preventDefault();return go(t.dataset.tab)}
  const b=e.target.closest("[data-act]");if(b)A[b.dataset.act](b.dataset.i!=null?+b.dataset.i:undefined);
  const f=e.target.closest("#filt button");if(f){filt=f.dataset.f;document.querySelectorAll("#filt button").forEach(x=>x.classList.toggle("on",x==f));renderList()}
 
  const c=e.target.closest("#cur button");if(c){P.cur=c.dataset.c;saveP();renderAll()}});
 document.addEventListener("input",e=>{const t=e.target;if(t.dataset.k){P[t.dataset.k]=+t.value;saveP();renderAll()}if(t.id=="setupDef"){P.setup=Math.max(0,+t.value||0);saveP()}});
-$("sortMode").onchange=renderList;$("adPass").addEventListener("keydown",e=>{if(e.key=="Enter")A.unlock()});$("optAvail").onchange=e=>{P.avail=e.target.checked;saveP();renderList()};$("optWorth").onchange=e=>{P.worth=e.target.checked;saveP();renderList()};
+$("sortMode").onchange=renderList;$("tableSearch").addEventListener("input",renderTable);$("tableFilter").onchange=renderTable;$("workloadMode").onchange=e=>{P.workload=e.target.value;saveP();renderAll()};$("gpuResolution").onchange=e=>{P.gpuResolution=e.target.value;saveP();renderAll()};$("graphicsMode").onchange=e=>{P.graphicsMode=e.target.value;saveP();renderAll()};$("versusA").onchange=e=>{P.versusA=e.target.value;saveP();renderVersus()};$("versusB").onchange=e=>{P.versusB=e.target.value;saveP();renderVersus()};$("adPass").addEventListener("keydown",e=>{if(e.key=="Enter")A.unlock()});$("optAvail").onchange=e=>{P.avail=e.target.checked;saveP();renderList()};$("optWorth").onchange=e=>{P.worth=e.target.checked;saveP();renderList()};
 /* Import ADDS to what you have and never deletes. Replacing would be dangerous now: with an account, a replaced list would delete listings
    everywhere, and a backup sent by a friend would wipe yours. To start clean, use "Delete all listings" first. */
 $("impFile").onchange=e=>{const f=e.target.files[0];e.target.value="";if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!Array.isArray(d.items))throw 0;
  let inc=d.items.map(norm).filter(sane);const bad=d.items.length-inc.length;if(!inc.length)throw 0;
  const lfp=new Set(items.map(fp)),have=new Set(items.map(i=>i.id));inc=inc.filter(x=>have.has(x.id)||!lfp.has(fp(x))); // already have it (same listing, older backup): skip
  if(items.length&&!confirm("Add "+inc.length+" listing"+(inc.length==1?"":"s")+" from this backup to your list? Nothing you already have is deleted."))return;
+ inc=inc.map(x=>have.has(x.id)?x:{...x,updatedAt:Date.now()}); // restored on purpose: newer than any deletion marker, local or in the account
  const before=items.length,ids=new Set(inc.map(x=>x.id));tombs=tombs.filter(t=>!ids.has(t.id)); // a backup restores a listing you deleted earlier
  const m=mergeAll(items,tombs,inc);items=m.live;tombs=m.tombs;jset("pvl_tombs",tombs);saveI();
  const s=d.settings||{};if(Number.isFinite(s.setupDefault))P.setup=s.setupDefault;saveP();build();renderAll();
  toast("Backup imported ✓ "+(items.length-before)+" added"+(bad?", "+bad+" skipped":""))}catch(x){toast("That file isn't a Scam or Steal backup")}};r.readAsText(f)};
 if(P.theme)document.documentElement.dataset.theme=P.theme;
-build();renderAll();go(["compare","add","settings","admin"].includes(location.hash.slice(1))?location.hash.slice(1):"compare");sync();
+build();renderAll();go(["compare","table","versus","add","settings","admin"].includes(location.hash.slice(1))?location.hash.slice(1):"compare");sync();
 jset("pcvaluelab_items",items); // saves the ids given to listings from before accounts existed, so they stay the same on the next load
 renderAccount();if(sess)cloudSync();
 document.addEventListener("submit",e=>{if(e.target.id=="acForm"){e.preventDefault();authSubmit("in")}});
