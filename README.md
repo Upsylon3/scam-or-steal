@@ -2,7 +2,7 @@
 
 **Compare used-PC listings by workload-aware performance, price, and value per euro.**
 
-[**Open the live app**](https://upsylon3.github.io/scam-or-steal/) · [Scoring model](SCORING-MODEL.md) · [Deployment guide](docs/DEPLOYMENT.md) · [Architecture](docs/ARCHITECTURE.md) · [Contributing](CONTRIBUTING.md)
+[**Open the live app**](https://upsylon3.github.io/scam-or-steal/) · [Project overview](docs/PROJECT.md) · [Scoring model](SCORING-MODEL.md) · [Deployment guide](docs/DEPLOYMENT.md) · [Architecture](docs/ARCHITECTURE.md) · [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md)
 
 Scam or Steal is a lightweight, browser-based tool for deciding whether a second-hand PC listing is a good deal. Add the hardware and asking price, then compare listings using benchmark-backed performance estimates instead of relying on the model names alone.
 
@@ -127,6 +127,10 @@ The GitHub Actions validation workflow also extracts the inline application scri
 
 - Import listings from pasted advert URLs or text, extracting hardware and price when confidence is sufficient.
 - Continue improving benchmark coverage while keeping unsupported results explicit rather than presenting guesses as measured performance.
+
+## License
+
+No license file is currently included in this repository. Do not assume that the source is licensed for redistribution or reuse. Add an explicit license before inviting others to reuse or redistribute the code.
 
 ## Project status
 
