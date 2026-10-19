@@ -27,6 +27,11 @@ The tool is designed to be transparent about its evidence: curated benchmark sui
 
 Scam or Steal currently compares details entered by the user. It does not automatically fetch marketplace ads, validate a seller's claims, inspect a PC, test component health, guarantee availability, or calculate exact game-specific FPS. Users should independently verify listing details, PSU quality, temperatures, hardware condition, warranty, peripherals, and seller reliability.
 
+
+### Suggested GitHub repository description
+
+> Compare used-PC listings with workload-aware CPU/GPU benchmarks, transparent value scores, and local-first tracking.
+
 ### Project at a glance
 
 - **Application:** static HTML, CSS, and JavaScript.
