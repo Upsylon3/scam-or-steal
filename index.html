@@ -119,7 +119,11 @@ const COST=(()=>{const b=MARKET.build,c={gpu:b.gpu,cpu:b.cpu,ram:b.ramGB*MARKET.
 const uid=()=>crypto.randomUUID?crypto.randomUUID():Math.random().toString(36).slice(2)+Date.now().toString(36),num=v=>typeof v=="number"&&isFinite(v),
  norm=i=>({...i,ssd:+i.ssd||0,hdd:+i.hdd||0,ramType:i.ramType||"DDR4",favorite:!!i.favorite,id:i.id||uid(),updatedAt:num(i.updatedAt)?i.updatedAt:0}); // updatedAt 0 = "older than any real edit"
 let items=jget("pcvaluelab_items",[]).map(norm),tombs=jget("pvl_tombs",[]).filter(t=>t&&typeof t.id=="string"),localParts={cpu:jget("pcvaluelab_custom_cpus",[]),gpu:jget("pcvaluelab_custom_gpus",[])},
+<<<<<<< HEAD
 remote=Object.assign({parts:[],ref:null},jget("pvl_remote",{})),P=Object.assign({aes:0,cur:"EUR",ref:null,theme:null,seen:0,avail:true,worth:false,setup:150,workload:"balanced",versusA:null,versusB:null},jget("pvl_prefs",{})),
+=======
+remote=jget("pvl_remote",{parts:[],ref:null}),P=Object.assign({aes:0,cur:"EUR",ref:null,theme:null,seen:0,avail:true,worth:false,setup:150,workload:"balanced",versusA:null,versusB:null},jget("pvl_prefs",{})),
+>>>>>>> 82aaac4290cd69e22a7543df299ab02722b20771
 parts={cpu:[],gpu:[]},editIdx=-1,editId="",filt="all",admin=sessionStorage.getItem("pvl_admin")||"",tab="compare";
 if(LS.getItem("pcvaluelab_currency"))P.cur=LS.getItem("pcvaluelab_currency");if(LS.getItem("pcvaluelab_theme")&&!P.theme)P.theme=LS.getItem("pcvaluelab_theme");
 const saveP=()=>jset("pvl_prefs",P),saveI=()=>{jset("pcvaluelab_items",items);scheduleSync()}; // every local change is also pushed to the account (debounced), when signed in
@@ -370,7 +374,11 @@ function renderTable(){
 function exportTableCsv(){
  const rows=tableRows(),all=items.map((it,i)=>Object.assign({i},it,score(it,refNow()))),best=Math.max(0,...all.filter(isAvail).map(r=>r.val));
  if(!rows.length){toast("No visible rows to export");return}
+<<<<<<< HEAD
  const quote=v=>{let t=String(v??"");if(typeof v=="string"&&/^[=+\-@\t\r]/.test(t))t="'"+t;return'"'+t.replace(/"/g,'""')+'"'};
+=======
+ const quote=v=>'"'+String(v??"").replace(/"/g,'""')+'"';
+>>>>>>> 82aaac4290cd69e22a7543df299ab02722b20771
  const lines=[TABLE_COLUMNS.filter(c=>c.key!=="actions").map(c=>quote(c.label)).join(",")].concat(rows.map(r=>TABLE_COLUMNS.filter(c=>c.key!=="actions").map(c=>quote(c.csv(r,best))).join(",")));
  const blob=new Blob(["\uFEFF"+lines.join("\r\n")],{type:"text/csv;charset=utf-8;"});
  const url=URL.createObjectURL(blob),a=document.createElement("a");
@@ -383,14 +391,22 @@ function renderSettings(){const r=refNow();$("refNow").innerHTML=`<span><b>${esc
  $("mktBody").innerHTML=["gpu","cpu","ram","sto"].map(k=>`<div style="margin-bottom:10px"><div class="rh"><span>${L[k]} <span style="font-weight:400;color:var(--muted)">· about $${Math.round(COST.c[k])}</span></span><span>${Math.round(COST.w[k]*100)}%</span></div><div class="bar"><i style="width:${COST.w[k]*100}%"></i></div></div>`).join("")+
   `<p class="hint">RAM per GB: DDR3 $${R.DDR3} · DDR4 $${R.DDR4} · DDR5 $${R.DDR5} (DDR5 costs ${(R.DDR5/R.DDR4).toFixed(1)}× DDR4). SSD $${Math.round(MARKET.ssdPerGB*1000)}/TB, HDD $${Math.round(MARKET.hddPerGB*1000)}/TB. US retail prices, ${esc(MARKET.asOf)}.</p>`;
  const wm=$("workloadMode");if(wm){wm.value=P.workload||"balanced";$("workloadHint").textContent=(WORKLOADS[P.workload]||WORKLOADS.balanced).hint}if($("gpuResolution"))$("gpuResolution").value=P.gpuResolution||"1440p";if($("graphicsMode"))$("graphicsMode").value=P.graphicsMode||"raster";
+<<<<<<< HEAD
  const sl=$("sliders");if(!sl.firstChild)sl.innerHTML=`<div><div class="rh"><span>Looks influence value</span><span id="aesVal"></span></div><input type="range" min="0" max="15" data-k="aes"></div>`;
  $("aesVal").textContent=P.aes+"%";sl.querySelector("input").value=P.aes; // updated in place: replacing the input mid-drag made it stop after one step
  
+=======
+ $("sliders").innerHTML=`<div><div class="rh"><span>Looks influence value</span><span>${P.aes}%</span></div><input type="range" min="0" max="15" value="${P.aes}" data-k="aes"></div>`;
+>>>>>>> 82aaac4290cd69e22a7543df299ab02722b20771
  if(document.activeElement!==$("setupDef"))$("setupDef").value=P.setup;
  document.querySelectorAll("#cur button").forEach(b=>b.classList.toggle("on",b.dataset.c==P.cur));
  document.querySelectorAll(".cur").forEach(e=>e.textContent=P.cur=="EUR"?"€":"$")}
 function renderAll(){$("optAvail").checked=P.avail;$("optWorth").checked=P.worth;renderList();renderTable();renderVersus();renderSettings();$("adminTab").hidden=!admin;$("adLock").hidden=!!admin;$("adBody").hidden=!admin;
+<<<<<<< HEAD
  $("foot").innerHTML=`${sess?"Your listings sync with your account.":"Your listings stay on your device."} CPU/GPU scores come from PassMark and refresh every Monday. · <a href="#admin" data-tab="admin">Admin</a>`}
+=======
+ $("foot").innerHTML=`Your listings stay on your device. CPU/GPU scores come from PassMark and refresh every Monday. · <a href="#admin" data-tab="admin">Admin</a>`}
+>>>>>>> 82aaac4290cd69e22a7543df299ab02722b20771
 function go(t){tab=t;["compare","table","versus","add","settings","admin"].forEach(x=>$("t-"+x).hidden=x!=t);document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.tab==t));history.replaceState(null,"","#"+t);scrollTo(0,0)}
 /* ---------- form ---------- */
 function unk(cb,inp,val,sel){cb.onchange=()=>{inp.disabled=cb.checked;if(sel){sel.disabled=cb.checked;if(cb.checked)sel.value="DDR4"}inp.value=cb.checked?val:""}}
@@ -424,8 +440,13 @@ const A={help:()=>$("help").showModal(),theme:()=>{P.theme=document.documentElem
  lock:()=>{admin="";sessionStorage.removeItem("pvl_admin");renderAll()},
  pubRef:async()=>{const r=refNow(),x=await adminRpc("admin_set_reference",{p:admin,cpu_name:r.cpuName,cpu_score:Math.round(r.cpu),gpu_name:r.gpuName,gpu_score:Math.round(r.gpu)}); // the SQL columns are integers
   toast(x.ok?"Default updated for everyone ✓":x.why);if(x.ok){P.ref=null;saveP();sync()}},
+<<<<<<< HEAD
  adSave:async()=>{const s=+$("adScore").value,t=[["cpu",pk.ac.val],["gpu",pk.ag.val]].find(x=>x[1]);if(!t||!(s>=100))return toast("Pick a part and enter a score");if(isPassmark(t[0],t[1][0]))return toast("That is a PassMark entry. It refreshes every Monday and can't be edited here.");const x=await adminRpc("admin_upsert_part",{p:admin,k:t[0],n:t[1][0],s:Math.round(s)});toast(x.ok?"Saved ✓":x.why);sync()},
  adDel:async()=>{const t=[["cpu",pk.ac.val],["gpu",pk.ag.val]].find(x=>x[1]);if(!t)return toast("Pick a part first");if(isPassmark(t[0],t[1][0]))return toast("That is a PassMark entry. It refreshes every Monday and can't be removed here.");const x=await adminRpc("admin_delete_part",{p:admin,k:t[0],n:t[1][0]});if(x.ok){remote.parts=remote.parts.filter(p=>!(p.kind==t[0]&&p.name.toLowerCase()==t[1][0].toLowerCase()));build()}toast(x.ok?"Removed ✓":x.why);sync()}};
+=======
+ adSave:async()=>{const s=+$("adScore").value,t=[["cpu",pk.ac.val],["gpu",pk.ag.val]].find(x=>x[1]);if(!t||!(s>=100))return toast("Pick a part and enter a score");const x=await rpc("admin_upsert_part",{p:admin,k:t[0],n:t[1][0],s});toast(x.ok?"Saved ✓":"Failed");sync()},
+ adDel:async()=>{const t=[["cpu",pk.ac.val],["gpu",pk.ag.val]].find(x=>x[1]);if(!t)return toast("Pick a part first");const x=await rpc("admin_delete_part",{p:admin,k:t[0],n:t[1][0]});if(x.ok){remote.parts=remote.parts.filter(p=>!(p.kind==t[0]&&p.name.toLowerCase()==t[1][0].toLowerCase()));build()}toast(x.ok?"Removed ✓":"Failed");sync()}};
+>>>>>>> 82aaac4290cd69e22a7543df299ab02722b20771
 document.addEventListener("click",e=>{const sort=e.target.closest("[data-table-sort]");if(sort){const key=sort.dataset.tableSort;if(tableSortKey===key)tableSortDir*=-1;else{tableSortKey=key;tableSortDir=(["name","cpuName","gpuName","aesthetic","unknown"].includes(key)?1:(["price","cut","net"].includes(key)?1:-1))}return renderTable()}const t=e.target.closest("[data-tab]");if(t){e.preventDefault();return go(t.dataset.tab)}
  const b=e.target.closest("[data-act]");if(b)A[b.dataset.act](b.dataset.i!=null?+b.dataset.i:undefined);
  const f=e.target.closest("#filt button");if(f){filt=f.dataset.f;document.querySelectorAll("#filt button").forEach(x=>x.classList.toggle("on",x==f));renderList()}

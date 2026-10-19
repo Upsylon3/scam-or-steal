@@ -84,7 +84,11 @@ window.PVL_BENCHMARKS = {
     { model: "AMD Radeon RX 7700 XT", aliases: ["Radeon RX 7700 XT","RX 7700 XT"], raster: { "1080p": 50.5, "1440p": 43.4, "4k": 34.3 }, rayTracing: { "1080p": 33.1, "1440p": 25.1, "4k": 15.2 }, source: "https://www.tomshardware.com/reviews/gpu-hierarchy,4388.html" },
     { model: "NVIDIA GeForce RTX 3070 Ti", aliases: ["GeForce RTX 3070 Ti","RTX 3070 Ti"], raster: { "1080p": 46.4, "1440p": 40, "4k": 23.5 }, rayTracing: { "1080p": 33.5, "1440p": 27.5, "4k": 13.7 }, source: "https://www.tomshardware.com/reviews/gpu-hierarchy,4388.html" },
     { model: "NVIDIA GeForce RTX 3070", aliases: ["GeForce RTX 3070","RTX 3070"], raster: { "1080p": 42.8, "1440p": 34.8, "4k": 23.6 }, rayTracing: { "1080p": 31.6, "1440p": 26, "4k": 12.9 }, source: "https://www.tomshardware.com/reviews/gpu-hierarchy,4388.html" },
+<<<<<<< HEAD
     { model: "NVIDIA GeForce RTX 4060 Ti 8GB", aliases: ["GeForce RTX 4060 Ti 8GB","RTX 4060 Ti 8GB","GeForce RTX 4060 Ti"], raster: { "1080p": 43.2, "1440p": 35.2, "4k": 21.5 }, rayTracing: { "1080p": 32.5, "1440p": 25.5, "4k": 12.6 }, source: "https://www.tomshardware.com/reviews/gpu-hierarchy,4388.html" },
+=======
+    { model: "NVIDIA GeForce RTX 4060 Ti 8GB", aliases: ["GeForce RTX 4060 Ti 8GB","RTX 4060 Ti 8GB"], raster: { "1080p": 43.2, "1440p": 35.2, "4k": 21.5 }, rayTracing: { "1080p": 32.5, "1440p": 25.5, "4k": 12.6 }, source: "https://www.tomshardware.com/reviews/gpu-hierarchy,4388.html" },
+>>>>>>> 82aaac4290cd69e22a7543df299ab02722b20771
     { model: "AMD Radeon RX 6750 XT", aliases: ["Radeon RX 6750 XT","RX 6750 XT"], raster: { "1080p": 40.8, "1440p": 34.4, "4k": 26.7 }, rayTracing: { "1080p": 22.6, "1440p": 18.9, "4k": 12.7 }, source: "https://www.tomshardware.com/reviews/gpu-hierarchy,4388.html" },
     { model: "AMD Radeon RX 6700 XT", aliases: ["Radeon RX 6700 XT","RX 6700 XT"], raster: { "1080p": 38.9, "1440p": 32.5, "4k": 25.3 }, rayTracing: { "1080p": 21.6, "1440p": 17.9, "4k": 12.3 }, source: "https://www.tomshardware.com/reviews/gpu-hierarchy,4388.html" },
     { model: "NVIDIA GeForce RTX 3060 Ti", aliases: ["GeForce RTX 3060 Ti","RTX 3060 Ti"], raster: { "1080p": 36.4, "1440p": 30.5, "4k": 17.5 }, rayTracing: { "1080p": 26.4, "1440p": 22.2, "4k": 11.5 }, source: "https://www.tomshardware.com/reviews/gpu-hierarchy,4388.html" },
