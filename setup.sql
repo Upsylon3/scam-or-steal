@@ -94,3 +94,15 @@ drop policy if exists "own listings update" on user_listings;
 create policy "own listings update" on user_listings for update to authenticated
   using (user_id = (select auth.uid())) with check (user_id = (select auth.uid()));
 grant select, insert, update on user_listings to authenticated;
+
+-- ---------- link checker bookkeeping (used only by scripts/check-listings.mjs with the service role key) ----------
+-- Counts how many runs in a row a saved ad looked gone. RLS on with no policy = unreachable from the browser.
+create table if not exists link_checks (
+  user_id uuid not null references auth.users(id) on delete cascade,
+  item_id text not null,
+  misses int not null default 0,
+  last_status text,
+  last_checked timestamptz not null default now(),
+  primary key (user_id, item_id)
+);
+alter table link_checks enable row level security;

@@ -7,7 +7,7 @@
 :root{--bg:#f6f7f9;--panel:#fff;--soft:#f3f5f8;--text:#161c26;--muted:#6b7686;--line:#e2e6ec;--acc:#1f6feb;--good:#178a57;--bad:#c0392b;--warn:#b7791f}
 :root[data-theme=dark]{--bg:#0e1319;--panel:#151b23;--soft:#111820;--text:#e8ecf1;--muted:#93a0b1;--line:#28313c;--acc:#5aa0ff;--good:#4cc38a;--bad:#ff7b72;--warn:#e7a94a}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
-button,input,select{font:inherit;color:inherit}button{cursor:pointer}.wrap{max-width:980px;margin:auto;padding:0 16px 60px}
+button,input,select{font:inherit;color:inherit}button{cursor:pointer}.wrap{max-width:980px;margin:auto;padding:0 16px 60px}body[data-tab=table] .wrap{max-width:none;padding:0 24px 60px}
 header{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);padding:14px 0 0;border-bottom:1px solid var(--line)}
 .top{display:flex;align-items:center;justify-content:space-between;gap:12px}.brand{font-weight:800;font-size:1.1rem;letter-spacing:-.01em}.brand small{display:block;font-weight:500;color:var(--muted);font-size:.72rem}
 nav{display:flex;gap:4px;margin-top:10px;overflow-x:auto}nav button{background:none;border:0;border-bottom:2px solid transparent;padding:9px 14px;font-weight:650;color:var(--muted);white-space:nowrap}nav button.on{color:var(--acc);border-color:var(--acc)}
@@ -404,7 +404,7 @@ function renderSettings(){const r=refNow();$("refNow").innerHTML=`<span><b>${esc
  document.querySelectorAll(".cur").forEach(e=>e.textContent=P.cur=="EUR"?"€":"$")}
 function renderAll(){document.querySelectorAll("#goal button").forEach(b=>b.classList.toggle("on",b.dataset.g==P.goal));$("optAvail").checked=P.avail;$("tableAll").checked=!!P.allCols;$("optWorth").checked=P.worth;renderList();renderTable();renderVersus();renderSettings();$("adminTab").hidden=!admin;$("adLock").hidden=!!admin;$("adBody").hidden=!admin;
  $("foot").innerHTML=`${sess?"Your listings sync with your account.":"Your listings stay on your device."} CPU/GPU scores come from PassMark and refresh every Monday. · <a href="#admin" data-tab="admin">Admin</a>`}
-function go(t){tab=t;["compare","table","versus","add","settings","admin"].forEach(x=>$("t-"+x).hidden=x!=t);document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.tab==t));history.replaceState(null,"","#"+t);scrollTo(0,0)}
+function go(t){tab=t;document.body.dataset.tab=t;["compare","table","versus","add","settings","admin"].forEach(x=>$("t-"+x).hidden=x!=t);document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.tab==t));history.replaceState(null,"","#"+t);scrollTo(0,0)}
 /* ---------- form ---------- */
 function unk(cb,inp,val,sel){cb.onchange=()=>{inp.disabled=cb.checked;if(sel){sel.disabled=cb.checked;if(cb.checked)sel.value="DDR4"}inp.value=cb.checked?val:""}}
 unk($("f_ramU"),$("f_ram"),16,$("f_ramType"));unk($("f_ssdU"),$("f_ssd"),1000);

@@ -104,10 +104,12 @@ When changing curated data, verify the exact hardware model, preserve aliases an
 | `scripts/check-benchmark-data.js` | Validates curated benchmark data for missing fields, invalid values, and alias collisions |
 | `scripts/update-parts.mjs` | Fetches and validates the weekly PassMark part list before updating it |
 | `scripts/supabase-keepalive.mjs` | Checks/keeps the configured Supabase project alive |
+| `scripts/check-listings.mjs` | Daily check of saved leboncoin links; removes listings whose ad is gone (dry run unless enabled) |
 | `tests/scoring-engine.test.js` | Regression tests for profiles, fallbacks, GPU suites, and coverage |
 | `.github/workflows/validate-static-app.yml` | JavaScript syntax, dataset validation, and scoring regression checks |
 | `.github/workflows/update-parts.yml` | Scheduled/manual PassMark refresh |
 | `.github/workflows/supabase-keepalive.yml` | Daily Supabase keep-alive job |
+| `.github/workflows/check-listings.yml` | Daily link check job for `check-listings.mjs` |
 
 See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for how the app fits together and [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for hosting/database setup.
 

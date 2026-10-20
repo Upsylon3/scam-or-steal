@@ -1,0 +1,27 @@
+# Daily check of saved leboncoin links; removes listings whose ad is gone. See scripts/check-listings.mjs for the safety rules.
+# Needs two repository secrets: SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY. Without them the run does nothing.
+# It only DELETES when the repository variable LINK_CHECK_DELETE is "true"; until then it is a dry run that just logs decisions.
+name: Check listing links
+
+on:
+  schedule:
+    - cron: "41 6 * * *"      # every day, 06:41 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: node scripts/check-listings.mjs
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          LINK_CHECK_DELETE: ${{ vars.LINK_CHECK_DELETE }}
