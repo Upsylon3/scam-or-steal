@@ -7,7 +7,7 @@
 :root{--bg:#f6f7f9;--panel:#fff;--soft:#f3f5f8;--text:#161c26;--muted:#6b7686;--line:#e2e6ec;--acc:#1f6feb;--good:#178a57;--bad:#c0392b;--warn:#b7791f}
 :root[data-theme=dark]{--bg:#0e1319;--panel:#151b23;--soft:#111820;--text:#e8ecf1;--muted:#93a0b1;--line:#28313c;--acc:#5aa0ff;--good:#4cc38a;--bad:#ff7b72;--warn:#e7a94a}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
-button,input,select{font:inherit;color:inherit}button{cursor:pointer}.wrap{max-width:980px;margin:auto;padding:0 16px 60px}body[data-tab=table] .wrap{max-width:none;padding:0 24px 60px}
+button,input,select{font:inherit;color:inherit}button{cursor:pointer}.wrap{max-width:980px;margin:auto;padding:0 16px 60px}body[data-view=table] .wrap{max-width:none;padding:0 24px 60px}
 header{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);padding:14px 0 0;border-bottom:1px solid var(--line)}
 .top{display:flex;align-items:center;justify-content:space-between;gap:12px}.brand{font-weight:800;font-size:1.1rem;letter-spacing:-.01em}.brand small{display:block;font-weight:500;color:var(--muted);font-size:.72rem}
 nav{display:flex;gap:4px;margin-top:10px;overflow-x:auto}nav button{background:none;border:0;border-bottom:2px solid transparent;padding:9px 14px;font-weight:650;color:var(--muted);white-space:nowrap}nav button.on{color:var(--acc);border-color:var(--acc)}
@@ -45,7 +45,7 @@ footer{color:var(--muted);font-size:.75rem;margin-top:26px;text-align:center}foo
   <div class="steps"><div><b>1 · Add a PC</b>Pick its CPU and GPU, enter the price.</div><div><b>2 · Add more</b>Unknown RAM or SSD? Tick “I don't know” and we assume a typical amount.</div><div><b>3 · Compare</b>The best deal rises to the top.</div></div>
   <div class="row" style="justify-content:center"><button class="btn pri" data-act="goadd">Add my first PC</button><button class="btn" data-act="sample">Try with examples</button></div></div>
  <div id="cmp" hidden>
-  <div class="row" style="margin-top:16px;gap:10px"><label style="margin:0">I'm looking for</label><div class="seg" id="goal"><button data-g="drive">Daily driver</button><button data-g="flip">Resale profit</button><button data-g="both">Both</button></div></div>
+  <div class="row" style="margin-top:16px;gap:10px"><label style="margin:0">I'm looking for</label><div class="seg" id="goal"><button data-g="drive">Daily driver</button><button data-g="flip">Resale profit</button><button data-g="both">Both</button></div><button class="btn gh" data-act="review" id="reviewBtn" style="margin-left:auto" hidden></button></div>
   <div id="hero" class="card hero"></div>
   <div class="card"><div class="row" style="justify-content:space-between;margin-bottom:6px">
    <div class="seg" id="filt"><button data-f="all" class="on">All</button><button data-f="fav">★ Favourites</button><button data-f="ddr5">DDR5 only</button></div>
@@ -89,6 +89,7 @@ footer{color:var(--muted);font-size:.75rem;margin-top:26px;text-align:center}foo
   <p class="hint">PassMark entries refresh every Monday and always win. Use this to fix or remove parts that people added themselves.</p></div></div></section>
 
 <footer id="foot"></footer></div>
+<dialog id="review"><h2>Review links</h2><div id="rvBody"></div></dialog>
 <dialog id="help"><h2>How scoring works</h2><p class="lead"><b>Performance</b> compares a PC's CPU and GPU with the yardstick PC for the workload you picked in Settings. <b>Value</b> is separate: CPU, GPU, RAM and storage are weighted by what a typical 2026 build spends on each (DDR5 counts for more than DDR4 because it costs more), then divided by the price minus an included setup, so a cheaper PC can beat a stronger one. On the Compare tab, <b>Daily driver</b> ranks by performance per euro for your workload, <b>Resale profit</b> by how much hardware (at market part prices) each euro buys, and <b>Both</b> by a mix that only rewards listings good at both. Assumed RAM/SSD values are marked with <span class="est">~</span>.</p><button class="btn pri" onclick="this.closest('dialog').close()">Got it</button></dialog>
 <div class="toast" id="toast"></div>
 <script src="builtin-parts.js"></script><script src="config.js"></script>
@@ -290,6 +291,20 @@ function ranked(ref){const all=items.map((it,i)=>({...it,i,...score(it,ref)})),a
  all.forEach(r=>{r.drv=bd?r.perfPerEuro/bd*100:0;r.flp=bf?r.val/bf*100:0;r.raw=P.goal=="drive"?r.drv:P.goal=="flip"?r.flp:Math.sqrt(r.drv*r.flp)});
  const bg=Math.max(0,...av.map(r=>r.raw));all.forEach(r=>r.gs=bg?r.raw/bg*100:0);return all}
 const GOALTXT={drive:"BEST DAILY-DRIVER DEAL",flip:"BEST RESALE DEAL",both:"BEST ALL-ROUNDER DEAL"},GOALK={drive:"daily driver",flip:"resale",both:"overall"};
+/* Review links: leboncoin blocks scripts, so ads are checked by you in your own browser. Listings whose name is an ad link and that you have not
+   checked in 2 days are queued; "Still up" stamps checkedAt, "Gone" deletes (with the usual deletion marker so sync carries it). */
+const linkOf=it=>/^https?:\/\//i.test(it.name||"")?it.name:"",DAY=864e5,dueLinks=()=>items.filter(it=>linkOf(it)&&Date.now()-(it.checkedAt||0)>2*DAY);
+const ago=t=>{if(!t)return"never";const d=Math.floor((Date.now()-t)/DAY);return d<1?"today":d+" d ago"};
+let rvQ=[];
+function rvStart(){rvQ=dueLinks().map(x=>x.id);$("review").showModal();rvShow()}
+function rvShow(){const it=items.find(x=>x.id==rvQ[0]),box=$("rvBody");
+ if(!it){box.innerHTML='<p class="lead">All links reviewed.</p><button class="btn pri" onclick="this.closest(\'dialog\').close()">Done</button>';return}
+ box.innerHTML=`<p class="lead">${rvQ.length} left to check. Open the ad, then tell me what you saw.</p><p><b>${title(it)}</b><br>${esc(it.cpuName)} · ${esc(it.gpuName)} · ${money(it.price)}<br><span class="hint">Last checked: ${ago(it.checkedAt)}</span></p>
+ <div class="row" style="gap:8px;flex-wrap:wrap"><a class="btn" href="${esc(linkOf(it))}" target="_blank" rel="noopener">Open ad ↗</a><button class="btn pri" data-act="rvUp">Still up</button><button class="btn dng" data-act="rvGone">Gone, delete</button><button class="btn gh" data-act="rvSkip">Skip</button><button class="btn gh" onclick="this.closest('dialog').close()">Close</button></div>`}
+function rvDone(){rvQ.shift();renderAll();$("review").open?rvShow():0}
+const A_rv={rvUp:()=>{const it=items.find(x=>x.id==rvQ[0]);if(it){it.checkedAt=it.updatedAt=Date.now();saveI()}rvDone()},
+ rvGone:()=>{const i=items.findIndex(x=>x.id==rvQ[0]);if(i>-1){tomb(items[i]);items.splice(i,1);saveI()}rvDone()},
+ rvSkip:()=>{rvQ.shift();$("review").open?rvShow():0}};
 function renderList(){const ref=refNow(),mode=$("sortMode").value;
  const all=ranked(ref),
   pool=all.filter(r=>!P.avail||isAvail(r)),hidden=all.length-pool.length,
@@ -307,7 +322,7 @@ function renderList(){const ref=refNow(),mode=$("sortMode").value;
   <div class="pf"><div class="num">${r.idx.toFixed(0)}%</div><div class="k">performance</div><div class="bar"><i style="width:${Math.min(100,r.idx)}%"></i></div></div>
   <div class="pr"><div class="num">${money(r.net)}</div><div class="k">${r.cut>0?"−"+money(r.cut)+" setup":"price"}</div></div><div><div class="num">${Math.round(r.gs)}</div><div class="k">${GOALK[P.goal]}</div></div>
   <div class="act"><button class="btn" data-act="fav" data-i="${r.i}">${r.favorite?"★ Saved":"☆ Save"}</button><button class="btn" data-act="avail" data-i="${r.i}">${av?"Mark unavailable":"Mark available"}</button><button class="btn" data-act="edit" data-i="${r.i}">Edit</button><button class="btn" data-act="det" data-i="${r.i}">Details</button><button class="btn dng" data-act="del" data-i="${r.i}">Delete</button></div>
-  <div class="det" id="det${r.i}" hidden>CPU ${r.cpuPct.toFixed(0)}% (${fmt(r.cpuScore)}) · GPU ${r.gpuPct.toFixed(0)}% (${fmt(r.gpuScore)})${r.gpuSuiteFps!=null?` · ~${Math.round(r.gpuSuiteFps)} aggregate suite FPS`:" · FPS estimate unavailable for this GPU"} · RAM ${r.ramPct.toFixed(0)}% (${r.ram} GB ${r.ramType}) · Storage ${r.stoPct.toFixed(0)}% · ${(r.perfPerEuro*100).toFixed(1)} performance points per ${P.cur=="EUR"?"€":"$"}100${r.cut>0?`<br>Listed ${money(r.price)} − ${money(r.cut)} setup = ${money(r.net)} for the PC itself`:""}</div></div>`}).join(""):`<div class="empty">Nothing matches this filter.</div>`}
+  <div class="det" id="det${r.i}" hidden>CPU ${r.cpuPct.toFixed(0)}% (${fmt(r.cpuScore)}) · GPU ${r.gpuPct.toFixed(0)}% (${fmt(r.gpuScore)})${r.gpuSuiteFps!=null?` · ~${Math.round(r.gpuSuiteFps)} aggregate suite FPS`:" · FPS estimate unavailable for this GPU"} · RAM ${r.ramPct.toFixed(0)}% (${r.ram} GB ${r.ramType}) · Storage ${r.stoPct.toFixed(0)}% · ${(r.perfPerEuro*100).toFixed(1)} performance points per ${P.cur=="EUR"?"€":"$"}100${linkOf(r)?` · link checked ${ago(r.checkedAt)}`:""}${r.cut>0?`<br>Listed ${money(r.price)} − ${money(r.cut)} setup = ${money(r.net)} for the PC itself`:""}</div></div>`}).join(""):`<div class="empty">Nothing matches this filter.</div>`}
 function title(r){const n=r.name||"Untitled PC";if(/^https?:\/\//i.test(n)){let h="listing";try{h=new URL(n).hostname.replace(/^www\./,"")}catch(e){}return`<a href="${esc(n)}" target="_blank" rel="noopener" style="color:var(--acc)">${esc(h)} ↗</a>`}return esc(n)}
 const TABLE_COLUMNS=[
  {key:"name",group:"Listing",label:"PC / listing",numeric:false,sort:r=>(r.name||r.cpuName+" + "+r.gpuName).toLowerCase(),csv:r=>r.name||r.cpuName+" + "+r.gpuName,cell:r=>title(r)},
@@ -402,9 +417,10 @@ function renderSettings(){const r=refNow();$("refNow").innerHTML=`<span><b>${esc
  if(document.activeElement!==$("setupDef"))$("setupDef").value=P.setup;
  document.querySelectorAll("#cur button").forEach(b=>b.classList.toggle("on",b.dataset.c==P.cur));
  document.querySelectorAll(".cur").forEach(e=>e.textContent=P.cur=="EUR"?"€":"$")}
-function renderAll(){document.querySelectorAll("#goal button").forEach(b=>b.classList.toggle("on",b.dataset.g==P.goal));$("optAvail").checked=P.avail;$("tableAll").checked=!!P.allCols;$("optWorth").checked=P.worth;renderList();renderTable();renderVersus();renderSettings();$("adminTab").hidden=!admin;$("adLock").hidden=!!admin;$("adBody").hidden=!admin;
+function renderAll(){{const n=dueLinks().length,b=$("reviewBtn");b.hidden=!n;b.textContent="Review links ("+n+")"}
+ document.querySelectorAll("#goal button").forEach(b=>b.classList.toggle("on",b.dataset.g==P.goal));$("optAvail").checked=P.avail;$("tableAll").checked=!!P.allCols;$("optWorth").checked=P.worth;renderList();renderTable();renderVersus();renderSettings();$("adminTab").hidden=!admin;$("adLock").hidden=!!admin;$("adBody").hidden=!admin;
  $("foot").innerHTML=`${sess?"Your listings sync with your account.":"Your listings stay on your device."} CPU/GPU scores come from PassMark and refresh every Monday. · <a href="#admin" data-tab="admin">Admin</a>`}
-function go(t){tab=t;document.body.dataset.tab=t;["compare","table","versus","add","settings","admin"].forEach(x=>$("t-"+x).hidden=x!=t);document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.tab==t));history.replaceState(null,"","#"+t);scrollTo(0,0)}
+function go(t){tab=t;document.body.dataset.view=t;["compare","table","versus","add","settings","admin"].forEach(x=>$("t-"+x).hidden=x!=t);document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.tab==t));history.replaceState(null,"","#"+t);scrollTo(0,0)}
 /* ---------- form ---------- */
 function unk(cb,inp,val,sel){cb.onchange=()=>{inp.disabled=cb.checked;if(sel){sel.disabled=cb.checked;if(cb.checked)sel.value="DDR4"}inp.value=cb.checked?val:""}}
 unk($("f_ramU"),$("f_ram"),16,$("f_ramType"));unk($("f_ssdU"),$("f_ssd"),1000);
@@ -422,7 +438,7 @@ function edit(i){const it=items[i];go("add");resetForm();editIdx=i;editId=it.id;
  $("f_name").value=it.name||"";pk.cpu.set([it.cpuName,it.cpuScore]);pk.gpu.set([it.gpuName,it.gpuScore]);$("f_ramU").checked=!!it.ramUnknown;$("f_ssdU").checked=!!it.ssdUnknown;
  $("f_ram").value=it.ram;$("f_ramType").value=it.ramType;$("f_ssd").value=it.ssd;$("f_ram").disabled=$("f_ramType").disabled=!!it.ramUnknown;$("f_ssd").disabled=!!it.ssdUnknown;$("f_hdd").value=it.hdd||"";$("f_price").value=it.price;$("f_look").value=it.aesthetic||"neutral";$("f_setup").checked=!!it.setup;$("setupBox").hidden=!it.setup;$("f_setupAmt").value=it.setup?(Number.isFinite(it.setupAmt)?it.setupAmt:P.setup):"";$("f_avail").checked=isAvail(it);setupHint()}
 /* ---------- actions ---------- */
-const A={help:()=>$("help").showModal(),theme:()=>{P.theme=document.documentElement.dataset.theme=="dark"?"light":"dark";document.documentElement.dataset.theme=P.theme;saveP()},
+const A={...A_rv,review:rvStart,help:()=>$("help").showModal(),theme:()=>{P.theme=document.documentElement.dataset.theme=="dark"?"light":"dark";document.documentElement.dataset.theme=P.theme;saveP()},
  goadd:()=>go("add"),cancel:()=>{resetForm()},refReset:()=>{P.ref=null;saveP();renderAll()},
  sample:()=>{items=[["Ryzen 5 5600 + RTX 3060","AMD Ryzen 5 5600",21000,"NVIDIA GeForce RTX 3060",17000,16,"DDR4",500,450],["Core i7-12700 + RX 6700 XT","Intel Core i7-12700",30000,"Radeon RX 6700 XT",19840,32,"DDR4",1000,600],["Ryzen 7 7800X3D + RX 7800 XT","AMD Ryzen 7 7800X3D",34280,"Radeon RX 7800 XT",24226,32,"DDR5",1000,1100]].map(a=>({name:a[0],cpuName:a[1],cpuScore:a[2],gpuName:a[3],gpuScore:a[4],ram:a[5],ramType:a[6],ssd:a[7],hdd:0,price:a[8],aesthetic:"neutral",favorite:false,id:uid(),updatedAt:Date.now()}));saveI();renderAll()},
  fav:i=>{items[i].favorite=!items[i].favorite;items[i].updatedAt=Date.now();saveI();renderAll()},chooseVersus:i=>{const id=items[i]&&items[i].id;if(!id)return;if(!P.versusA||P.versusA===id){P.versusA=id;P.versusB=items.find(x=>x.id!==id)?.id||id}else P.versusB=id;saveP();go("versus");renderVersus()},avail:i=>{items[i].available=items[i].available===false;items[i].updatedAt=Date.now();saveI();renderAll()},

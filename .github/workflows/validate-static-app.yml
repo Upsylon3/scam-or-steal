@@ -38,5 +38,3 @@ jobs:
         run: node scripts/check-benchmark-data.js
       - name: Run scoring engine regression tests
         run: node tests/scoring-engine.test.js
-      - name: Check link checker rules
-        run: node tests/check-listings.test.mjs

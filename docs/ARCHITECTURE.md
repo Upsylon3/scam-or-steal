@@ -81,7 +81,6 @@ The UI's normalized Value / 100 is relative to the current collection. It is not
 | `check-benchmark-data.js` | Flags invalid scores/dates, missing HTTPS sources, empty suites, and alias collisions |
 | `update-parts.yml` + `update-parts.mjs` | Refreshes the broad PassMark parts list weekly with safety checks |
 | `supabase-keepalive.yml` + `supabase-keepalive.mjs` | Periodically checks the configured Supabase project and may restore it if configured to do so |
-| `check-listings.yml` + `check-listings.mjs` | Daily: opens each saved leboncoin ad link and replaces listings whose ad is gone by a deletion marker in `user_listings` (synced accounts only; uses the service role key; bookkeeping in `link_checks`) |
 
 ## Extension guidelines
 
